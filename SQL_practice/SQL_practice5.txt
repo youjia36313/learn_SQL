@@ -1,0 +1,1042 @@
+mysql> show tables;
++------------------+
+| Tables_in_jugyou |
++------------------+
+| bp_aed           |
+| bp_h25           |
+| bp_h26           |
+| bp_h27           |
+| bp_h28           |
+| bp_poi           |
+| disney           |
+| j53ref           |
+| jugyou21         |
+| jugyou22         |
+| jugyou23         |
+| jugyou31         |
+| jugyou32         |
+| jugyou33         |
+| jugyou34         |
+| jugyou35         |
+| jugyou36         |
+| jugyou37         |
+| jugyou41         |
+| jugyou42         |
+| jugyou43         |
+| jugyou44         |
+| jugyou51         |
+| jugyou52         |
+| jugyou53         |
+| jugyou64         |
+| jugyou71a        |
+| jugyou71b        |
+| jugyou72s        |
+| jugyou72z        |
+| jugyou73m        |
+| jugyou73s        |
+| jugyou74s        |
+| pi200            |
++------------------+
+34 rows in set (0.04 sec)
+
+mysql> use jugyou;
+Database changed
+mysql> SELECT * FROM jugyou51;
++------+------+-------+
+| no   | name | stock |
++------+------+-------+
+|    1 | A    |    10 |
+|    2 | B    |     8 |
+|    3 | A    |    60 |
+|    4 | A    |    15 |
+|    5 | C    |     1 |
+|    6 | D    |     6 |
+|    7 | C    |     4 |
+|    8 | A    |    10 |
+|    9 | NULL |  NULL |
++------+------+-------+
+9 rows in set (0.00 sec)
+
+mysql> SELECT COUNT(*) FROM jugyou51;
++----------+
+| COUNT(*) |
++----------+
+|        9 |
++----------+
+1 row in set (0.07 sec)
+
+mysql> SELECT ROUND(no,-2)FROM jugyou51;
++--------------+
+| ROUND(no,-2) |
++--------------+
+|            0 |
+|            0 |
+|            0 |
+|            0 |
+|            0 |
+|            0 |
+|            0 |
+|            0 |
+|            0 |
++--------------+
+9 rows in set (0.01 sec)
+
+mysql> SELECT * FROM jugyou51;
++------+------+-------+
+| no   | name | stock |
++------+------+-------+
+|    1 | A    |    10 |
+|    2 | B    |     8 |
+|    3 | A    |    60 |
+|    4 | A    |    15 |
+|    5 | C    |     1 |
+|    6 | D    |     6 |
+|    7 | C    |     4 |
+|    8 | A    |    10 |
+|    9 | NULL |  NULL |
++------+------+-------+
+9 rows in set (0.00 sec)
+
+mysql> SELECT COUNT(*) FROM jugyou51 WHERE no='A';
++----------+
+| COUNT(*) |
++----------+
+|        0 |
++----------+
+1 row in set, 1 warning (0.03 sec)
+
+mysql> SELECT COUNT(*) FROM jugyou51 WHERE stock<10;
++----------+
+| COUNT(*) |
++----------+
+|        4 |
++----------+
+1 row in set (0.00 sec)
+
+mysql> SELECT * FROM jugyou51;
++------+------+-------+
+| no   | name | stock |
++------+------+-------+
+|    1 | A    |    10 |
+|    2 | B    |     8 |
+|    3 | A    |    60 |
+|    4 | A    |    15 |
+|    5 | C    |     1 |
+|    6 | D    |     6 |
+|    7 | C    |     4 |
+|    8 | A    |    10 |
+|    9 | NULL |  NULL |
++------+------+-------+
+9 rows in set (0.01 sec)
+
+mysql> SELECT COUNT(no),COUNT(name) FROM jugyou51;
++-----------+-------------+
+| COUNT(no) | COUNT(name) |
++-----------+-------------+
+|         9 |           8 |
++-----------+-------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT DISTINCT name FROM jugyou51;
++------+
+| name |
++------+
+| A    |
+| B    |
+| C    |
+| D    |
+| NULL |
++------+
+5 rows in set (0.02 sec)
+
+mysql> SELECT name FROM jugyou51;
++------+
+| name |
++------+
+| A    |
+| B    |
+| A    |
+| A    |
+| C    |
+| D    |
+| C    |
+| A    |
+| NULL |
++------+
+9 rows in set (0.01 sec)
+
+mysql> SELECT ALL name FROM jugyou51;
++------+
+| name |
++------+
+| A    |
+| B    |
+| A    |
+| A    |
+| C    |
+| D    |
+| C    |
+| A    |
+| NULL |
++------+
+9 rows in set (0.00 sec)
+
+mysql> SELECT DISTINCT COUNT(name)FROM jugyou51;
++-------------+
+| COUNT(name) |
++-------------+
+|           8 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT COUNT(DISTINCT name)FROM jugyou51;
++----------------------+
+| COUNT(DISTINCT name) |
++----------------------+
+|                    4 |
++----------------------+
+1 row in set (0.02 sec)
+
+mysql> SELECT SUM(stock)FROM jugyou51;
++------------+
+| SUM(stock) |
++------------+
+|        114 |
++------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT SUM(DISTINCT stock)FROM jugyou51;
++---------------------+
+| SUM(DISTINCT stock) |
++---------------------+
+|                 104 |
++---------------------+
+1 row in set (0.01 sec)
+
+mysql> SELECT SUM(stock)/COUNT(stock)FROM jugyou51;
++-------------------------+
+| SUM(stock)/COUNT(stock) |
++-------------------------+
+|                 14.2500 |
++-------------------------+
+1 row in set (0.03 sec)
+
+mysql> SELECT AVG(stock)FROM jugyou51;
++------------+
+| AVG(stock) |
++------------+
+|    14.2500 |
++------------+
+1 row in set (0.01 sec)
+
+mysql> SELECT AVG(CASE WHEN stock IS NULL THEN 0 ELSE stock END) FROM jugyou51;
++----------------------------------------------------+
+| AVG(CASE WHEN stock IS NULL THEN 0 ELSE stock END) |
++----------------------------------------------------+
+|                                            12.6667 |
++----------------------------------------------------+
+1 row in set (0.01 sec)
+
+mysql> SELECT MIN(stock),MAX(stock) FROM jugyou51;
++------------+------------+
+| MIN(stock) | MAX(stock) |
++------------+------------+
+|          1 |         60 |
++------------+------------+
+1 row in set (0.02 sec)
+
+mysql> SELECT * jugyou51;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'jugyou51' at line 1
+mysql> SELECT * FROM jugyou51;
++------+------+-------+
+| no   | name | stock |
++------+------+-------+
+|    1 | A    |    10 |
+|    2 | B    |     8 |
+|    3 | A    |    60 |
+|    4 | A    |    15 |
+|    5 | C    |     1 |
+|    6 | D    |     6 |
+|    7 | C    |     4 |
+|    8 | A    |    10 |
+|    9 | NULL |  NULL |
++------+------+-------+
+9 rows in set (0.01 sec)
+
+mysql> SELECT name FROM jugyou51 GROUP BY name;
++------+
+| name |
++------+
+| A    |
+| B    |
+| C    |
+| D    |
+| NULL |
++------+
+5 rows in set (0.03 sec)
+
+mysql> SELECT name,COUNT(name),SUM(stock) FROM jugyou51 GROUP BY name;
++------+-------------+------------+
+| name | COUNT(name) | SUM(stock) |
++------+-------------+------------+
+| A    |           4 |         95 |
+| B    |           1 |          8 |
+| C    |           2 |          5 |
+| D    |           1 |          6 |
+| NULL |           0 |       NULL |
++------+-------------+------------+
+5 rows in set (0.03 sec)
+
+mysql> SELECT name, stock FROM jugyou51 ORDER BY name;
++------+-------+
+| name | stock |
++------+-------+
+| NULL |  NULL |
+| A    |    10 |
+| A    |    60 |
+| A    |    15 |
+| A    |    10 |
+| B    |     8 |
+| C    |     1 |
+| C    |     4 |
+| D    |     6 |
++------+-------+
+9 rows in set (0.03 sec)
+
+mysql> SELECT name, COUNT(name) FROM jugyou51 WHERE COUNT(name) = 1 GROUP BY name;
+ERROR 1111 (HY000): Invalid use of group function
+mysql> SELECT name, COUNT(name) FROM jugyou51 Group by name WHERE COUNT(name) = 1;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE COUNT(name) = 1' at line 1
+mysql> SELECT name, COUNT(name) FROM jugyou51 GROUP BY name WHERE COUNT(name) = 1;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE COUNT(name) = 1' at line 1
+mysql> SELECT name, COUNT(name) FROM jugyou51 GROUP BY name HAVING COUNT(name) = 1;
++------+-------------+
+| name | COUNT(name) |
++------+-------------+
+| B    |           1 |
+| D    |           1 |
++------+-------------+
+2 rows in set (0.01 sec)
+
+mysql> SELECT name, stock, COUNT(name) FROM jugyou51 GROUP BY name, stock;
++------+-------+-------------+
+| name | stock | COUNT(name) |
++------+-------+-------------+
+| A    |    10 |           2 |
+| B    |     8 |           1 |
+| A    |    60 |           1 |
+| A    |    15 |           1 |
+| C    |     1 |           1 |
+| D    |     6 |           1 |
+| C    |     4 |           1 |
+| NULL |  NULL |           0 |
++------+-------+-------------+
+8 rows in set (0.01 sec)
+
+mysql> SELECT * FROM jugyou51 WHERE stock = (SELECT MIN(stock) FROM jugyou51);
++------+------+-------+
+| no   | name | stock |
++------+------+-------+
+|    5 | C    |     1 |
++------+------+-------+
+1 row in set (0.13 sec)
+
+mysql> ➢こんな感じにできたら嬉しいが...
+    -> 52
+    -> 
+    -> SELECT MIN(stock) FROM jugyou51;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '➢こんな感じにできたら嬉しいが...
+52
+
+SELECT MIN(stock) FROM jugy' at line 1
+mysql> 
+mysql> SELECT * FROM jugyou51 WHERE stock = 1;
++------+------+-------+
+| no   | name | stock |
++------+------+-------+
+|    5 | C    |     1 |
++------+------+-------+
+1 row in set (0.01 sec)
+
+mysql> 
+mysql> SELECT * FROM jugyou51 WHERE stock = MIN(stock);
+ERROR 1111 (HY000): Invalid use of group function
+mysql> SELECT (SELECT COUNT(*) FROM jugyou51),
+    -> (SELECT MAX(stock) FROM jugyou51);
++---------------------------------+-----------------------------------+
+| (SELECT COUNT(*) FROM jugyou51) | (SELECT MAX(stock) FROM jugyou51) |
++---------------------------------+-----------------------------------+
+|                               9 |                                60 |
++---------------------------------+-----------------------------------+
+1 row in set (0.22 sec)
+
+mysql> SELECT * FROM (SELECT no FROM jugyou51) AS st;
++------+
+| no   |
++------+
+|    1 |
+|    2 |
+|    3 |
+|    4 |
+|    5 |
+|    6 |
+|    7 |
+|    8 |
+|    9 |
++------+
+9 rows in set (0.04 sec)
+
+mysql> INSERT INTO jugyou51 SELECT * FROM jugyou51 WHERE name = 'B';
+Query OK, 1 row affected (0.22 sec)
+Records: 1  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM jugyou51;
++------+------+-------+
+| no   | name | stock |
++------+------+-------+
+|    1 | A    |    10 |
+|    2 | B    |     8 |
+|    3 | A    |    60 |
+|    4 | A    |    15 |
+|    5 | C    |     1 |
+|    6 | D    |     6 |
+|    7 | C    |     4 |
+|    8 | A    |    10 |
+|    9 | NULL |  NULL |
+|    2 | B    |     8 |
++------+------+-------+
+10 rows in set (0.00 sec)
+
+mysql> SELECT * FROM jugyou53;
++------+------+
+| no   | a    |
++------+------+
+|    1 | NULL |
+|    2 | NULL |
+|    3 | NULL |
+|    4 | NULL |
+|    5 | NULL |
++------+------+
+5 rows in set (0.31 sec)
+
+mysql> SELECT * FROM j53ref;
++------+
+| no   |
++------+
+|    2 |
+|    4 |
++------+
+2 rows in set (0.07 sec)
+
+mysql> show tables;
++------------------+
+| Tables_in_jugyou |
++------------------+
+| bp_aed           |
+| bp_h25           |
+| bp_h26           |
+| bp_h27           |
+| bp_h28           |
+| bp_poi           |
+| disney           |
+| j53ref           |
+| jugyou21         |
+| jugyou22         |
+| jugyou23         |
+| jugyou31         |
+| jugyou32         |
+| jugyou33         |
+| jugyou34         |
+| jugyou35         |
+| jugyou36         |
+| jugyou37         |
+| jugyou41         |
+| jugyou42         |
+| jugyou43         |
+| jugyou44         |
+| jugyou51         |
+| jugyou52         |
+| jugyou53         |
+| jugyou64         |
+| jugyou71a        |
+| jugyou71b        |
+| jugyou72s        |
+| jugyou72z        |
+| jugyou73m        |
+| jugyou73s        |
+| jugyou74s        |
+| pi200            |
++------------------+
+34 rows in set (0.34 sec)
+
+mysql> EXISTS(SELECT*FROM j53ref WHERE j53re.no=jugyou53.no;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'EXISTS(SELECT*FROM j53ref WHERE j53re.no=jugyou53.no' at line 1
+mysql> EXISTS(SELECT*FROM j53ref WHERE j53re.no=jugyou53.no
+    -> ^C
+mysql> EXISTS ( SELECT * FROM j53ref WHERE j53ref.no = jugyou53.no);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'EXISTS ( SELECT * FROM j53ref WHERE j53ref.no = jugyou53.no)' at line 1
+mysql> EXISTS ( SELECT * FROM j53ref WHERE j53ref.no = jugyou53.no);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'EXISTS ( SELECT * FROM j53ref WHERE j53ref.no = jugyou53.no)' at line 1
+mysql> EXISTS ( SELECT * FROM j53ref WHERE j53ref.no = jugyou53.no)
+    -> ^C
+mysql> UPDATE jugyou53 SET a = 'Exist' WHERE EXISTS
+    -> ( SELECT * FROM j53ref WHERE j53ref.no = jugyou53.no);
+Query OK, 2 rows affected (0.12 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+mysql> SELECT * FROM jugyou53;
++------+-------+
+| no   | a     |
++------+-------+
+|    1 | NULL  |
+|    2 | Exist |
+|    3 | NULL  |
+|    4 | Exist |
+|    5 | NULL  |
++------+-------+
+5 rows in set (0.02 sec)
+
+mysql> SELECT * FROM jugyou53 WHERE no IN (2,4);
++------+-------+
+| no   | a     |
++------+-------+
+|    2 | Exist |
+|    4 | Exist |
++------+-------+
+2 rows in set (0.04 sec)
+
+mysql> SELECT * FROM jugyou53 WHERE no IN (SELECT no FROM j53ref);
++------+-------+
+| no   | a     |
++------+-------+
+|    2 | Exist |
+|    4 | Exist |
++------+-------+
+2 rows in set (0.10 sec)
+
+mysql> SELECT * FROM jugyou71a;
++------+
+| a    |
++------+
+|    1 |
+|    3 |
+|    7 |
+|    9 |
++------+
+4 rows in set (0.17 sec)
+
+mysql> SELECT * FROM jugyou71b;
++------+
+| b    |
++------+
+|    2 |
+|    3 |
+|    4 |
+|    5 |
++------+
+4 rows in set (0.05 sec)
+
+mysql> SELECT * FROM jugyou71b
+    -> UNION
+    -> SELECT * FROM jugyou71A;
++------+
+| b    |
++------+
+|    2 |
+|    3 |
+|    4 |
+|    5 |
+|    1 |
+|    7 |
+|    9 |
++------+
+7 rows in set (0.05 sec)
+
+mysql> SELECT * FROM juyou71a UNION SELECT id FROM jugyou64;
+ERROR 1146 (42S02): Table 'jugyou.juyou71a' doesn't exist
+mysql> SELECT a AS c FROM jugyou71a
+    -> UNION
+    -> SELECT b AS c FROM jugyou71b ORDER BY c;
++------+
+| c    |
++------+
+|    1 |
+|    2 |
+|    3 |
+|    4 |
+|    5 |
+|    7 |
+|    9 |
++------+
+7 rows in set (0.08 sec)
+
+mysql> SELECT * FROM jugyou71a
+    -> UNION ALL
+    -> SELECT * FROM jugyou71b;
++------+
+| a    |
++------+
+|    1 |
+|    3 |
+|    7 |
+|    9 |
+|    2 |
+|    3 |
+|    4 |
+|    5 |
++------+
+8 rows in set (0.01 sec)
+
+mysql> SELECT * FROM yugyou71a;
+ERROR 1146 (42S02): Table 'jugyou.yugyou71a' doesn't exist
+mysql> SELECT * FROM jugyou71a;
++------+
+| a    |
++------+
+|    1 |
+|    3 |
+|    7 |
+|    9 |
++------+
+4 rows in set (0.01 sec)
+
+mysql> SELECT * FROM jugyou71b;
++------+
+| b    |
++------+
+|    2 |
+|    3 |
+|    4 |
+|    5 |
++------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT * FROM jugyou7a,jugyou71b;
+ERROR 1146 (42S02): Table 'jugyou.jugyou7a' doesn't exist
+mysql> SELECT * FROM jugyou71a,jugyou71b;
++------+------+
+| a    | b    |
++------+------+
+|    1 |    2 |
+|    3 |    2 |
+|    7 |    2 |
+|    9 |    2 |
+|    1 |    3 |
+|    3 |    3 |
+|    7 |    3 |
+|    9 |    3 |
+|    1 |    4 |
+|    3 |    4 |
+|    7 |    4 |
+|    9 |    4 |
+|    1 |    5 |
+|    3 |    5 |
+|    7 |    5 |
+|    9 |    5 |
++------+------+
+16 rows in set (0.01 sec)
+
+mysql> SELECT * FROM jugyou72s;
++------+-----------------+-------+
+| code | name            | price |
++------+-----------------+-------+
+|    1 | フライパン      |   700 |
+|    2 | 鍋              |   500 |
+|    3 | 洗濯バサミ      |   100 |
++------+-----------------+-------+
+3 rows in set (0.18 sec)
+
+mysql> DESC jugyou72s
+    -> ^C
+mysql> DESC jugyou72s;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| code  | int(4)      | NO   | PRI | NULL    |       |
+| name  | varchar(10) | YES  |     | NULL    |       |
+| price | int(4)      | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+3 rows in set (0.24 sec)
+
+mysql> DESC jugyou72z;
++-------+--------+------+-----+---------+-------+
+| Field | Type   | Null | Key | Default | Extra |
++-------+--------+------+-----+---------+-------+
+| code  | int(4) | NO   | PRI | NULL    |       |
+| stock | int(4) | YES  |     | NULL    |       |
++-------+--------+------+-----+---------+-------+
+2 rows in set (0.03 sec)
+
+mysql> SELECT * FROM jugyou72z;
++------+-------+
+| code | stock |
++------+-------+
+|    1 |    50 |
+|    2 |    10 |
+|    3 |   200 |
++------+-------+
+3 rows in set (0.08 sec)
+
+mysql> SELECT * FROM jugyou72s, jugyou72z WHERE jugyou72s.code = jugyou72z.code ;
++------+-----------------+-------+------+-------+
+| code | name            | price | code | stock |
++------+-----------------+-------+------+-------+
+|    1 | フライパン      |   700 |    1 |    50 |
+|    2 | 鍋              |   500 |    2 |    10 |
+|    3 | 洗濯バサミ      |   100 |    3 |   200 |
++------+-----------------+-------+------+-------+
+3 rows in set (0.01 sec)
+
+mysql> SELECT * FROM jugyou72s INNER JOIN jugyou72z
+    -> ON jugyou72s.code = jugyou72z.code;
++------+-----------------+-------+------+-------+
+| code | name            | price | code | stock |
++------+-----------------+-------+------+-------+
+|    1 | フライパン      |   700 |    1 |    50 |
+|    2 | 鍋              |   500 |    2 |    10 |
+|    3 | 洗濯バサミ      |   100 |    3 |   200 |
++------+-----------------+-------+------+-------+
+3 rows in set (0.01 sec)
+
+mysql> SELECT * FROM jugyou73s;
++------+-----------------+-------+-------+
+| code | name            | price | mcode |
++------+-----------------+-------+-------+
+|    1 | フライパン      |   700 | M1    |
+|    2 | 鍋              |   500 | M1    |
+|    3 | 洗濯バサミ      |   100 | M2    |
++------+-----------------+-------+-------+
+3 rows in set (0.04 sec)
+
+mysql> SELECT * FROM jugyou73m;
++-------+--------------------------+
+| mcode | mname                    |
++-------+--------------------------+
+| M1    | 調理具メーカー           |
+| M2    | 洗濯用品メーカー         |
++-------+--------------------------+
+2 rows in set (0.04 sec)
+
+mysql> SELECT * FROM jugyou73s INNER JOIN jugyou73m
+    -> ON jugyou73s.mcode = jugyou73m.mcode;
++------+-----------------+-------+-------+-------+--------------------------+
+| code | name            | price | mcode | mcode | mname                    |
++------+-----------------+-------+-------+-------+--------------------------+
+|    1 | フライパン      |   700 | M1    | M1    | 調理具メーカー           |
+|    2 | 鍋              |   500 | M1    | M1    | 調理具メーカー           |
+|    3 | 洗濯バサミ      |   100 | M2    | M2    | 洗濯用品メーカー         |
++------+-----------------+-------+-------+-------+--------------------------+
+3 rows in set (0.01 sec)
+
+mysql> DESC jugyou73m;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| mcode | varchar(4)  | NO   | PRI | NULL    |       |
+| mname | varchar(10) | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+2 rows in set (0.16 sec)
+
+mysql> DESC jugyou73s;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| code  | int(4)      | NO   | PRI | NULL    |       |
+| name  | varchar(10) | YES  |     | NULL    |       |
+| price | int(4)      | YES  |     | NULL    |       |
+| mcode | varchar(4)  | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+4 rows in set (0.01 sec)
+
+mysql> SELECT * FROM jugyou74s;
++------+-----------------+-------+
+| code | name            | price |
++------+-----------------+-------+
+|    1 | フライパン      |   700 |
+|    2 | 鍋              |   500 |
+|    3 | 洗濯バサミ      |   100 |
+|    4 | 包丁            |   800 |
++------+-----------------+-------+
+4 rows in set (0.06 sec)
+
+mysql> SELECT * FROM jugyou72z;
++------+-------+
+| code | stock |
++------+-------+
+|    1 |    50 |
+|    2 |    10 |
+|    3 |   200 |
++------+-------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT * FROM jugyou74s INNER JOIN jugyou72z
+    -> ON jugyou74s.code = jugyou72z.code;
++------+-----------------+-------+------+-------+
+| code | name            | price | code | stock |
++------+-----------------+-------+------+-------+
+|    1 | フライパン      |   700 |    1 |    50 |
+|    2 | 鍋              |   500 |    2 |    10 |
+|    3 | 洗濯バサミ      |   100 |    3 |   200 |
++------+-----------------+-------+------+-------+
+3 rows in set (0.01 sec)
+
+mysql> SELECT * FROM jugyou74s;
++------+-----------------+-------+
+| code | name            | price |
++------+-----------------+-------+
+|    1 | フライパン      |   700 |
+|    2 | 鍋              |   500 |
+|    3 | 洗濯バサミ      |   100 |
+|    4 | 包丁            |   800 |
++------+-----------------+-------+
+4 rows in set (0.07 sec)
+
+mysql> SELECT * FROM jugyou72z;
++------+-------+
+| code | stock |
++------+-------+
+|    1 |    50 |
+|    2 |    10 |
+|    3 |   200 |
++------+-------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT * FROM jugyou74s LEFT JOIN jugyou72z
+    -> ON jugyou74s.code = jugyou72z.code;
++------+-----------------+-------+------+-------+
+| code | name            | price | code | stock |
++------+-----------------+-------+------+-------+
+|    1 | フライパン      |   700 |    1 |    50 |
+|    2 | 鍋              |   500 |    2 |    10 |
+|    3 | 洗濯バサミ      |   100 |    3 |   200 |
+|    4 | 包丁            |   800 | NULL |  NULL |
++------+-----------------+-------+------+-------+
+4 rows in set (0.05 sec)
+
+mysql> SELECT * FROM jugyou74s RIGHT JOIN jugyou72z
+    -> ON jugyou74s.code = jugyou72z.code;
++------+-----------------+-------+------+-------+
+| code | name            | price | code | stock |
++------+-----------------+-------+------+-------+
+|    1 | フライパン      |   700 |    1 |    50 |
+|    2 | 鍋              |   500 |    2 |    10 |
+|    3 | 洗濯バサミ      |   100 |    3 |   200 |
++------+-----------------+-------+------+-------+
+3 rows in set (0.00 sec)
+
+mysql> show tables;
++------------------+
+| Tables_in_jugyou |
++------------------+
+| bp_aed           |
+| bp_h25           |
+| bp_h26           |
+| bp_h27           |
+| bp_h28           |
+| bp_poi           |
+| disney           |
+| j53ref           |
+| jugyou21         |
+| jugyou22         |
+| jugyou23         |
+| jugyou31         |
+| jugyou32         |
+| jugyou33         |
+| jugyou34         |
+| jugyou35         |
+| jugyou36         |
+| jugyou37         |
+| jugyou41         |
+| jugyou42         |
+| jugyou43         |
+| jugyou44         |
+| jugyou51         |
+| jugyou52         |
+| jugyou53         |
+| jugyou64         |
+| jugyou71a        |
+| jugyou71b        |
+| jugyou72s        |
+| jugyou72z        |
+| jugyou73m        |
+| jugyou73s        |
+| jugyou74s        |
+| pi200            |
++------------------+
+34 rows in set (0.10 sec)
+
+mysql> SELECT * FROM bp_aed;
++--------+--------------------------------------------------------------------+-----------------------------------------------------------+-----------+------------+
+| area   | name                                                               | pos                                                       | lat       | lng        |
++--------+--------------------------------------------------------------------+-----------------------------------------------------------+-----------+------------+
+| 富海   | 富海公民館                                                         | 玄関ロビー                                                | 34.052182 | 131.643679 |
+| 富海   | 富海小学校                                                         | １階保健室前廊下                                          | 34.051858 | 131.646742 |
+| 富海   | 富海中学校                                                         | 本館１階廊下事務室前                                      | 34.052287 | 131.647409 |
+| 富海   | 富海保育所                                                         | 玄関                                                      | 34.050982 | 131.648092 |
+| 牟礼   | 牟礼公民館                                                         | 玄関フロア                                                | 34.054502 | 131.605394 |
+| 牟礼   | 牟礼小学校                                                         | 職員室前廊下                                              | 34.056677 | 131.605772 |
+| 牟礼   | 牟礼南小学校                                                       | 事務室窓口横                                              | 34.052827 | 131.605939 |
+| 牟礼   | 牟礼中学校                                                         | 正面玄関、職員室間廊下                                    | 34.065739 | 131.599003 |
+| 牟礼   | 国府中学校                                                         | １階保健室前廊下                                          | 34.054403 | 131.591864 |
+| 牟礼   | 大平園                                                             | 玄関                                                      | 34.059477 | 131.615476 |
+| 牟礼   | 愛光園                                                             | 管理棟玄関                                                | 34.059405 | 131.615024 |
+| 牟礼   | なかよし園                                                         | 玄関                                                      | 34.059172 | 131.614173 |
+| 牟礼   | 大平山ロープウェイ（山ろく駅）                                     | 待合室                                                    | 34.066467 | 131.623179 |
+| 牟礼   | 大平山ロープウェイ（山頂駅）                                       | 待合室                                                    | 34.071733 | 131.630262 |
+| 牟礼   | 牟礼福祉センター                                                   | １階フロア                                                | 34.042868 | 131.612652 |
+| 牟礼   | 消防署東出張所                                                     | １階事務所                                                | 34.053985 | 131.605329 |
+| 牟礼   | 江泊保育所                                                         | 玄関                                                      | 34.044432 | 131.611955 |
+| 牟礼   | 東牟礼保育園                                                       | 事務所                                                    | 34.065549 | 131.612179 |
+| 牟礼   | 牟礼保育園                                                         | 事務所                                                    | 34.053691 | 131.603272 |
+| 牟礼   | 瑞祥幼稚園                                                         | 玄関                                                      | 34.061154 | 131.597306 |
+| 松崎   | 松崎公民館                                                         | 玄関ロビー                                                | 34.059228 | 131.571534 |
+| 松崎   | 松崎小学校                                                         | 管理棟１階保健室前廊下                                    | 34.059645 | 131.575992 |
+| 松崎   | 文化福祉会館                                                       | １階西側ロビー                                            | 34.055901 | 131.576393 |
+| 松崎   | 公会堂                                                             | 中２階事務室前                                            | 34.055046 | 131.576208 |
+| 松崎   | 防府競輪場                                                         | サービスセンター１階（競輪場正門付近）                    | 34.067057 | 131.578641 |
+| 松崎   | アスピラート（地域交流センター）                                   | １階西側事務所横                                          | 34.053702 | 131.571201 |
+| 松崎   | 地域協働支援センター（ルルサス防府２階）                           | 事務所前                                                  | 34.053702 | 131.571201 |
+| 松崎   | 防府図書館（ルルサス防府３階）                                     | 中央カウンター前                                          | 34.053535 | 131.571453 |
+| 松崎   | 天神ピア（まちづくり活動拠点施設）                                 | １階フロア受付                                            | 34.054332 | 131.573634 |
+| 松崎   | 観光情報館コア銀座                                                 | １階フロア                                                | 34.055473 | 131.573612 |
+| 松崎   | サイクリングターミナル                                             | 玄関ロビー                                                | 34.076393 | 131.578477 |
+| 松崎   | うめてらす                                                         | 休憩コーナー北側                                          | 34.061683 | 131.573759 |
+| 松崎   | みどり保育園                                                       | 玄関                                                      | 34.055021 | 131.576981 |
+| 松崎   | 山頭火ふるさと館                                                   | 自動販売機設置場所                                        | 34.061136 | 131.572636 |
+| 松崎   | 松崎幼稚園                                                         | 玄関ロビー                                                | 34.057556 | 131.574984 |
+| 佐波   | 佐波公民館                                                         | １階学習室入口廊下                                        | 34.056583 | 131.562645 |
+| 佐波   | 佐波小学校                                                         | 職員室前廊下                                              | 34.058759 | 131.565862 |
+| 佐波   | 佐波中学校                                                         | １階職員室                                                | 34.066028 | 131.569347 |
+| 佐波   | 市役所１号館                                                       | 正面玄関ロビー                                            | 34.051795 |  131.56284 |
+| 佐波   | 市役所４号館                                                       | 正面玄関ロビー                                            | 34.050926 | 131.562749 |
+| 佐波   | 消防本部                                                           | 消防署待機室                                              |  34.05701 | 131.563205 |
+| 佐波   | サンライフ防府（中高年齢労働者福祉センター）                       | １階ロビー                                                | 34.059002 | 131.567671 |
+| 佐波   | 駅西自転車等駐車場                                                 | 管理人室                                                  | 34.053519 | 131.566967 |
+| 佐波   | 宮市福祉センター                                                   | １階フロア                                                | 34.066211 | 131.566295 |
+| 佐波   | 宮市保育所                                                         | 園児玄関                                                  | 34.066349 | 131.567106 |
+| 佐波   | 西佐波保育園                                                       | 事務所１階                                                | 34.055365 | 131.557104 |
+| 佐波   | 佐波幼稚園                                                         | 中央玄関口                                                | 34.058378 | 131.563676 |
+| 勝間   | 勝間公民館                                                         | 玄関ロビー                                                | 34.049233 | 131.579186 |
+| 勝間   | 勝間小学校                                                         | 南校舎１階保健室前廊下                                    | 34.051216 | 131.582022 |
+| 勝間   | 潮彩市場（水産総合交流施設）                                       | １階エントランス                                          | 34.037863 | 131.597218 |
+| 勝間   | 勝間保育園                                                         | 正面玄関                                                  | 34.047547 | 131.574831 |
+| 勝間   | 双葉保育園                                                         | １階エントランス                                          | 34.051211 | 131.584184 |
+| 勝間   | 双葉幼稚園                                                         | １階職員室前廊下                                          | 34.046591 | 131.578131 |
+| 華浦   | 華浦公民館                                                         | 玄関ロビー                                                | 34.046619 | 131.572109 |
+| 華浦   | 華浦小学校                                                         | 管理棟１階保健室前廊下                                    | 34.041109 | 131.568853 |
+| 華浦   | 桑山中学校                                                         | １棟１階中央玄関奥                                        | 34.046169 | 131.561407 |
+| 華浦   | ソラール（青少年科学館）                                           | １階自動販売機前                                          |  34.04941 | 131.561632 |
+| 華浦   | 文化財郷土資料館                                                   | ２階エレベーター横                                        | 34.049045 | 131.562582 |
+| 華浦   | 英雲荘                                                             | １階事務室                                                | 34.045333 | 131.573748 |
+| 華浦   | 保健センター                                                       | 休日診療所渡り廊下                                        | 34.039117 | 131.566415 |
+| 華浦   | 身体障害者福祉センター                                             | 玄関ロビー                                                | 34.038623 | 131.566648 |
+| 華浦   | 三田尻保育所                                                       | 玄関入口下駄箱の上                                        | 34.045386 | 131.569603 |
+| 野島   | 野島漁村センター                                                   | 野島分団消防器庫１階                                      | 33.942783 | 131.692929 |
+| 野島   | 野島小・中学校                                                     | 本館１階玄関奥                                            | 33.943777 | 131.696033 |
+| 新田   | 新田公民館                                                         | 玄関                                                      | 34.024927 | 131.568554 |
+| 新田   | 新田小学校                                                         | 管理棟１階保健室前廊下                                    | 34.032271 | 131.571176 |
+| 新田   | ソルトアリーナ防府（体育館１階）                                   | １階共用部通路                                            | 34.023141 | 131.569437 |
+| 新田   | ソルトアリーナ防府（体育館２階）                                   | ２階ロビー                                                | 34.023141 | 131.569437 |
+| 新田   | 陸上競技場                                                         | １階エントランスホール                                    | 34.020496 | 131.570913 |
+| 新田   | 武道館                                                             | エントランスホール                                        | 34.022946 | 131.568332 |
+| 新田   | 防府スポーツセンター野球場                                         | 野球場正面入口横                                          | 34.025291 | 131.567858 |
+| 新田   | 防府スポーツセンタープール                                         | プール事務室（閉場時は野球場資料室）                      | 34.023853 | 131.567608 |
+| 新田   | クリーンセンター                                                   | 管理棟１階玄関                                            | 34.033901 |  131.58102 |
+| 新田   | 新田保育園                                                         | 事務室                                                    | 34.031454 | 131.566171 |
+| 新田   | 西須賀保育所                                                       | 玄関                                                      | 34.027078 | 131.568424 |
+| 向島   | 向島公民館                                                         | 玄関                                                      | 34.019164 | 131.580609 |
+| 向島   | 向島小学校                                                         | １階職員室前廊下                                          | 34.018212 | 131.579241 |
+| 向島   | 向島運動公園                                                       | 管理棟窓口横                                              | 34.008202 | 131.568115 |
+| 向島   | 向島保育園                                                         | １階玄関                                                  | 34.017331 | 131.576806 |
+| 中関   | 中関公民館                                                         | 玄関                                                      | 34.021133 | 131.547823 |
+| 中関   | 中関小学校                                                         | 北校舎１階事務室前                                        | 34.018256 |  131.54853 |
+| 中関   | 華陽中学校                                                         | １階保健室前廊下                                          | 34.026125 | 131.560167 |
+| 中関   | 三田尻塩田記念産業公園                                             | 管理棟１階ロビー                                          | 34.017717 | 131.559646 |
+| 中関   | 職業訓練センター                                                   | １階ロビー                                                | 34.024272 | 131.555886 |
+| 中関   | 華陽保育園                                                         | 職員室                                                    | 34.024983 |  131.56096 |
+| 中関   | 錦江保育園                                                         | 本館玄関                                                  | 34.024062 | 131.551768 |
+| 中関   | 錦江第二保育園                                                     | 玄関                                                      |  34.01375 | 131.534646 |
+| 中関   | 中関幼稚園                                                         | 別館１階ホール                                            | 34.018761 | 131.550806 |
+| 西浦   | 西浦公民館                                                         | １階ロビー                                                | 34.024895 | 131.523999 |
+| 西浦   | 西浦小学校                                                         | 職員室前                                                  | 34.023151 | 131.520894 |
+| 西浦   | 華西中学校                                                         | 事務室前廊下                                              | 34.030878 | 131.531149 |
+| 西浦   | 消防署南出張所                                                     | １階事務所                                                | 34.031207 | 131.534818 |
+| 西浦   | 西浦保育園                                                         | 正面玄関                                                  | 34.022474 | 131.523716 |
+| 西浦   | 西浦幼稚園                                                         | 玄関                                                      | 34.022101 | 131.521108 |
+| 華城   | 華城公民館                                                         | １階ロビー                                                | 34.048963 |  131.54493 |
+| 華城   | 華城小学校                                                         | 本館玄関                                                  | 34.046624 | 131.544597 |
+| 華城   | 上下水道局                                                         | ロビー                                                    | 34.050645 | 131.554739 |
+| 華城   | 青果物地方卸売市場                                                 | １階卸売場・防府青果㈱事務所前                            | 34.042652 | 131.532629 |
+| 華城   | 華城保育園                                                         | 玄関                                                      | 34.046591 | 131.549794 |
+| 華城   | 華城幼稚園                                                         | 玄関                                                      | 34.046474 |   131.5454 |
+| 小野   | 小野公民館                                                         | 玄関                                                      | 34.126447 | 131.605636 |
+| 小野   | 小野小学校                                                         | 保健室前廊下                                              |  34.12206 | 131.602898 |
+| 小野   | 小野中学校                                                         | １階東側相談室前                                          | 34.129662 | 131.605477 |
+| 小野   | 小野保育園                                                         | 玄関                                                      | 34.121753 |  131.59987 |
+| 右田   | 右田公民館                                                         | １階ロビー                                                | 34.068929 | 131.553618 |
+| 右田   | 右田小学校                                                         | 保健室前                                                  | 34.077508 | 131.561827 |
+| 右田   | 玉祖小学校                                                         | 本館校舎玄関                                              | 34.057098 | 131.530146 |
+| 右田   | 右田中学校                                                         | 職員室（外出入口付近）                                    | 34.070402 |  131.55589 |
+| 右田   | 右田福祉センター                                                   | １階自動ドア側                                            | 34.070913 | 131.564909 |
+| 右田   | 玉祖福祉センター                                                   | 玄関                                                      | 34.055956 | 131.524843 |
+| 右田   | 悠久苑(斎場）                                                      | 1階ロビー                                                 |  34.09291 | 131.541021 |
+| 右田   | 右田保育園                                                         | エントランスホール（１階入口）                            | 34.072196 | 131.556951 |
+| 右田   | 玉祖保育園                                                         | 玄関ホール                                                | 34.055634 | 131.525463 |
+| 右田   | 多々良幼稚園                                                       | 園児玄関                                                  | 34.062336 | 131.538692 |
+| 大道   | 大道公民館                                                         | 玄関                                                      | 34.059895 | 131.488765 |
+| 大道   | 大道小学校                                                         | 放送室前廊下                                              | 34.059528 | 131.489205 |
+| 大道   | 大道中学校                                                         | 正面玄関                                                  | 34.067233 | 131.489643 |
+| 大道   | 妙蓮寺保育園                                                       | 職員室前                                                  | 34.050153 | 131.477167 |
+| 大道   | 山口短期大学附属幼稚園                                             | 玄関入口                                                  | 34.053675 | 131.493088 |
++--------+--------------------------------------------------------------------+-----------------------------------------------------------+-----------+------------+
+119 rows in set (0.10 sec)
+
+mysql> SELECT * FROM bp_aed limit 5;
++--------+-----------------+--------------------------------+-----------+------------+
+| area   | name            | pos                            | lat       | lng        |
++--------+-----------------+--------------------------------+-----------+------------+
+| 富海   | 富海公民館      | 玄関ロビー                     | 34.052182 | 131.643679 |
+| 富海   | 富海小学校      | １階保健室前廊下               | 34.051858 | 131.646742 |
+| 富海   | 富海中学校      | 本館１階廊下事務室前           | 34.052287 | 131.647409 |
+| 富海   | 富海保育所      | 玄関                           | 34.050982 | 131.648092 |
+| 牟礼   | 牟礼公民館      | 玄関フロア                     | 34.054502 | 131.605394 |
++--------+-----------------+--------------------------------+-----------+------------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT * FROM bp_poi limit 5;
++------+--------+-----------------------------+-----------+-----------------------------+-----------+------------+
+| no   | area   | name                        | alt1      | alt2                        | lat       | lng        |
++------+--------+-----------------------------+-----------+-----------------------------+-----------+------------+
+|   11 | 大道   | 繁枝神社                    | 建造物    | 神社                        |  34.05619 | 131.486797 |
+|    7 | 大道   | 山頭火句碑                  | 建造物    | 石碑・塚                    | 34.039393 | 131.475911 |
+|    8 | 大道   | 祠（宮島の十七夜）          | 風景      | 祭・行事                    | 34.041758 | 131.482172 |
+|   22 | 大道   | 山頭火樽                    | 建造物    | その他                      | 34.058665 |  131.48809 |
+|   21 | 大道   | 横曽根川新堤防              | 建造物    | 河川施設・用水施設          | 34.046816 | 131.497513 |
++------+--------+-----------------------------+-----------+-----------------------------+-----------+------------+
+5 rows in set (0.07 sec)
+
+mysql> SELECT * FROM bp_h25 limit 5;
++-----------------------------------+---------+--------+--------+
+| name                              | outside | inside | oai    |
++-----------------------------------+---------+--------+--------+
+| 防府天満宮                        |  416000 | 322292 | 738292 |
+| 毛利氏庭園・毛利博物館            |   41295 |  21086 |  62381 |
+| 周防国分寺                        |   24110 |  16890 |  41000 |
+| 大平山ロープウェイ                |    5783 |  16825 |  22608 |
+| 東大寺別院阿弥陀寺                |   12900 |  39150 |  52050 |
++-----------------------------------+---------+--------+--------+
+5 rows in set (0.03 sec)
+
+mysql> SELECT * FROM bp_h26 limit 5;
++-----------------------------------+---------+--------+--------+
+| name                              | outside | inside | oai    |
++-----------------------------------+---------+--------+--------+
+| 防府天満宮                        |  417000 | 321739 | 738739 |
+| 毛利氏庭園・毛利博物館            |   41416 |  24597 |  66013 |
+| 周防国分寺                        |   21792 |  15268 |  37060 |
+| 大平山ロープウェイ                |    4336 |  11170 |  15506 |
+| 東大寺別院阿弥陀寺                |   12850 |  38950 |  51800 |
++-----------------------------------+---------+--------+--------+
+5 rows in set (0.03 sec)
+
+mysql> 

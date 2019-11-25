@@ -1,0 +1,582 @@
+index
+◆データベースオブジェクト
+➢テーブル、インデックス、ビュー
+◆テーブル操作の基本
+➢作成、複製、削除など
+➢制約
+◆インデックス
+➢検索処理の強化
+◆ビュー
+➢SELECT 命令のオブジェクト化
+◆データベースオブジェクトとは
+➢データベース内にある、データを表示したり保管したりする、実体を持ったもの
+
+
+◆データテーブルの作成
+➢新規作成 CREATE
+➢既存のテーブルの設定の引き継ぎ
+CREATE TABLE `テーブル名 ` (`列名1 ` データ型 [DEFAULT デフォルト値] [NULL | NOT NULL] ,
+`列名2 ` ...) [オプション ] ;
+例1:
+CREATE TABLE `jugyou61` (
+`no` int(3) NOT NULL,
+`v` varchar(5),
+`d` date
+);
+
+テーブルの複製
+◆パターン1: 格納されたデータも一緒に複製、サブクエリを使います
+➢テーブル jugyou62a として複製、create select
+➢これから説明する制約は引き継がれない,PRIMARY KEY 制約, UNIQUE KEY 制約
+◆パターン2: テーブルの設定情報のみ複製
+➢テーブル jugyou62p として複製LIKE を使います
+INSERT 命令を使います,発行する度に全入力される,パターン1の効果
+INSERT INTO 複製先テーブル SELECT * FROM 複製元テーブル
+
+例1:
+CREATE TABLE `jugyou62a` SELECT * FROM jugyou61;
+mysql> create table jugyou62a select * from jugyou61;
+Query OK, 1 row affected (0.50 sec)
+Records: 1  Duplicates: 0  Warnings: 0
+
+mysql> desc jugyou62a; #比較
++-------+------------+------+-----+---------+-------+
+| Field | Type       | Null | Key | Default | Extra |
++-------+------------+------+-----+---------+-------+
+| no    | int(3)     | NO   |     | NULL    |       |
+| v     | varchar(5) | YES  |     | NULL    |       |
+| d     | date       | YES  |     | NULL    |       |
++-------+------------+------+-----+---------+-------+
+3 rows in set (0.10 sec)
+
+mysql> desc jugyou61; #比較
++-------+------------+------+-----+---------+-------+
+| Field | Type       | Null | Key | Default | Extra |
++-------+------------+------+-----+---------+-------+
+| no    | int(3)     | NO   |     | NULL    |       |
+| v     | varchar(5) | YES  |     | NULL    |       |
+| d     | date       | YES  |     | NULL    |       |
++-------+------------+------+-----+---------+-------+
+3 rows in set (0.02 sec)
+
+CREATE TABLE `jugyou62p` LIKE jugyou61;
+例2:
+mysql> create table jugyou62b like jugyou61;
+Query OK, 0 rows affected (0.16 sec)
+mysql> select * from jugyou62b;
+Empty set (0.04 sec)
+
+mysql> desc jugyou62b;
++-------+------------+------+-----+---------+-------+
+| Field | Type       | Null | Key | Default | Extra |
++-------+------------+------+-----+---------+-------+
+| no    | int(3)     | NO   |     | NULL    |       |
+| v     | varchar(5) | YES  |     | NULL    |       |
+| d     | date       | YES  |     | NULL    |       |
++-------+------------+------+-----+---------+-------+
+3 rows in set (0.02 sec)
+
+
+◆データテーブルの変更
+➢列の追加, 変更, 削除 ALTER
+基本構造
+ALTER TABLE テーブル名 変更命令
+◆ALTER TABLE 命令でできること(抜粋)
+➢列の追加
+➢列のプロパティの変更
+➢名前の変更,テーブル名, 列名
+➢列の削除
+
+◆追加命令の基本構造
+ALTER TABLE テーブル名 ADD 列の定義
+➢ADD 列の定義:列名 列のプロパティ [位置]
+➢“列のプロパティ” は CREATE TABLE の時と同じ,“データ型 [DEFAULT デフォルト値 ][NULL | NOT NULL]”
+➢“位置”コマンド
+省略する 最後(右端)
+FIRST　最初(左端)
+AFTER列名　列名 の右隣
+例1:
+ALTER TABLE jugyou62a ADD name varchar(10) FIRST;
+Query OK, 0 rows affected (0.57 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> DESC jugyou62a;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| name  | varchar(10) | YES  |     | NULL    |       |
+| no    | int(3)      | NO   |     | NULL    |       |
+| v     | varchar(5)  | YES  |     | NULL    |       |
+| d     | date        | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+4 rows in set (0.12 sec)
+
+◆列のプロパティの変更
+◆変更には MODIFY サブコマンド
+➢基本構造
+ALTER TABLE テーブル名 MODIFY 列の定義
+◆MODIFY コマンドで変更可能なプロパティ
+➢データ型, デフォルト値, NULL の扱い
+➢列名は他のサブコマンド
+例1:
+ALTER TABLE jugyou62a MODIFY name varchar(10) DEFAULT 'hoge';
+mysql> ALTER TABLE jugyou62a MODIFY name varchar(10) DEFAULT 'hoge';
+Query OK, 0 rows affected (0.07 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+mysql> DESC jugyou62a;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| name  | varchar(10) | YES  |     | hoge    |       |
+| no    | int(3)      | NO   |     | NULL    |       |
+| v     | varchar(5)  | YES  |     | NULL    |       |
+| d     | date        | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+4 rows in set (0.02 sec)
+
+◆名前の変更は RENAME サブコマンド
+➢列名だけでなく、テーブル名も変更可能
+◆列名の変更
+➢基本構文
+ALTER TABLE テーブル名 RENAME COLUMN 列名 TO 新しい列名 ;
+◆テーブル名の変更
+➢基本構文
+ALTER TABLE テーブル名 RENAME TO 新しいテーブル名 ;
+例1:
+ALTER TABLE jugyou62a RENAME COLUMN name TO nickname;
+例1:
+ALTER TABLE jugyou62a RENAME COLUMN name TO nickname;
+Query OK, 0 rows affected (0.28 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+mysql> desc jugyou62a;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| nickname | varchar(10) | YES  |     | hoge    |       |
+| no       | int(3)      | NO   |     | NULL    |       |
+| v        | varchar(5)  | YES  |     | NULL    |       |
+| d        | date        | YES  |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+4 rows in set (0.14 sec)
+
+例2:
+ALTER TABLE jugyou62a RENAME TO jugyou62;
+Query OK, 0 rows affected (0.27 sec)
+
+mysql> SHOW TABLES;
++------------------+
+| Tables_in_jugyou |
++------------------+
+| bp_aed           |
+| bp_h25           |
+| bp_h26           |
+| bp_h27           |
+| bp_h28           |
+| bp_poi           |
+| disney           |
+| j53ref           |
+| jugyou21         |
+| jugyou22         |
+| jugyou23         |
+| jugyou31         |
+| jugyou32         |
+| jugyou33         |
+| jugyou34         |
+| jugyou35         |
+| jugyou36         |
+| jugyou37         |
+| jugyou41         |
+| jugyou42         |
+| jugyou43         |
+| jugyou44         |
+| jugyou51         |
+| jugyou52         |
+| jugyou53         |
+| jugyou61         |
+| jugyou61_1       |
+| jugyou62         |
+| jugyou62b        |
+| jugyou64         |
+| jugyou71a        |
+| jugyou71b        |
+| jugyou72s        |
+| jugyou72z        |
+| jugyou73m        |
+| jugyou73s        |
+| jugyou74s        |
+| pi200            |
++------------------+
+38 rows in set (0.20 sec)
+
+◆列の再定義
+◆CHANGE サブコマンドを用いると、列名 + 列のプロパティを変更できる
+◆基本構造
+ALTER TABLE テーブル名 CHANGE 列名 新しい列名 列のプロパティ ;
+➢“列のプロパティ”データ型, デフォルト値, NULL の扱い
+例1:
+➢nickname 列を、 int(5) の id 列に
+ALTER TABLE jugyou62 CHANGE nickname id int(5);
+Query OK, 0 rows affected, 1 warning (0.51 sec)
+Records: 0  Duplicates: 0  Warnings: 1
+mysql> DESC jugyou62;
++-------+------------+------+-----+---------+-------+
+| Field | Type       | Null | Key | Default | Extra |
++-------+------------+------+-----+---------+-------+
+| id    | int(5)     | YES  |     | NULL    |       |
+| no    | int(3)     | NO   |     | NULL    |       |
+| v     | varchar(5) | YES  |     | NULL    |       |
+| d     | date       | YES  |     | NULL    |       |
++-------+------------+------+-----+---------+-------+
+4 rows in set (0.05 sec)
+
+
+◆データテーブルの削除
+➢テーブル本体の削除 DROP
+➢基本構造
+DROP TABLE テーブル名
+作るのは大変、消すのは簡単
+要注意!「本当に削除しますか?」とも聞いてこない。
+mysql> drop table jugyou62p;
+Query OK, 0 rows affected (0.14 sec)
+◆テーブルは残しておきたいけど、中身は削除したい
+➢方法1: DELETE 命令を使う,データ量が多いと処理に時間がかかる傾向あり
+➢方法2: TRUNCATE 命令を使う
+例1:
+mysql> select * from jugyou62a;
++----+------+------------+
+| no | v    | d          |
++----+------+------------+
+|  1 | hoge | 2019-11-25 |
++----+------+------------+
+1 row in set (0.01 sec)
+
+mysql> delete from jugyou62a;
+Query OK, 1 row affected (0.04 sec)
+
+mysql> select * from jugyou62a;
+Empty set (0.00 sec)
+例2:
+mysql> select * from jugyou62a;
++----+------+------------+
+| no | v    | d          |
++----+------+------------+
+|  1 | hoge | 2019-11-25 |
++----+------+------------+
+1 row in set (0.00 sec)
+
+mysql> truncate table jugyou62a;
+Query OK, 0 rows affected (0.17 sec)
+
+mysql> select * from jugyou62a;
+Empty set (0.01 sec)
+
+◆列の削除には DROP サブコマンド
+➢基本構造
+ALTER TABLE テーブル名 DROP 列名 ;
+例1:
+➢id 列を削除しよう
+➢結果を確認
+ALTER TABLE jugyou62 DROP id;
+Query OK, 0 rows affected (0.41 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc jugyou62;
++-------+------------+------+-----+---------+-------+
+| Field | Type       | Null | Key | Default | Extra |
++-------+------------+------+-----+---------+-------+
+| no    | int(3)     | NO   |     | NULL    |       |
+| v     | varchar(5) | YES  |     | NULL    |       |
+| d     | date       | YES  |     | NULL    |       |
++-------+------------+------+-----+---------+-------+
+3 rows in set (0.15 sec)
+
+◆制約とは
+➢データベース操作へのルールのこと
+NULL は許容しない、など
+◆制約の種類
+➢列への制約(列制約)
+各列に課せる、独立したルール
+➢テーブルへの制約(テーブル制約)
+複数の列にまたがるルール
+1つのテーブルに1つしか設定できないルール、など
+
+➢NOT NULL の設定例
+CREATE TABLE テーブル名 (
+列名 int(3) NOT NULL
+);
+
+PRIMARY KEY
+◆「キーワード検索」
+➢関連語から検索する手法(インターネット検索など)
+◆データベースでも検索したい
+➢WHERE 句で検索できる(行を絞れる)
+➢このとき、行が1つに絞り込めるようなキーをPRIMARY KEY(主キー)という
+◆PRIMARY KEY の例
+➢学籍番号、分類番号の組み合わせ、など
+
+➢列が一意に求まれば良い、つまり
+1. その列 or 列の組み合わせが一意であること
+2. NULL ではないこと
+3. 各テーブルに最大1つ(組)しか存在しないこと 主キーは1つで十分(という設計が望ましい)
+◆PRIMARY KEY 制約の設定方法
+1. ある列に対する設定
+2. 複数の列に対する設定
+◆書き方1: 1つの列のみ設定する場合
+➢NOT NULL 制約と同様、列プロパティとして設定
+`列名 ` データ型 [DEFAULT制約 ] PRIMARY KEY
+◆書き方2: 1つの列 or 複数列を設定する場合
+➢列の設定と同列に入力する
+➢制約に名前を付ける場合
+CONSTRAINT キーワードを用いる
+CONSTRAINT 制約名 PRIMARY KEY (列名1 , 列名2 , ...)
+
+例1:➢arrival と room を PRIMARY KEY とする➢制約名は pkey とする
+CREATE TABLE jugyou63 (
+`arrival` date ,
+`room` varchar(3) ,
+`name` varchar(10) ,
+CONSTRAINT pkey PRIMARY KEY (arrival, room)
+);
+
+mysql> INSERT INTO jugyou63 VALUES (CURRENT_DATE, '101', 'hoge');
+Query OK, 1 row affected (0.05 sec)
+mysql> INSERT INTO jugyou63 VALUES( CURRENT_DATE,'101','foo' );
+ERROR 1062 (23000): Duplicate entry '2019-11-25-101' for key 'PRIMARY'
+mysql> INSERT INTO jugyou63 VALUES( CURRENT_DATE,'102','foo' );
+Query OK, 1 row affected (0.01 sec)
+mysql> INSERT INTO jugyou63 VALUES( CURRENT_DATE,'102','foo' );
+ERROR 1062 (23000): Duplicate entry '2019-11-25-102' for key 'PRIMARY'
+mysql> INSERT INTO jugyou63 VALUES( '2019-04-01','102','bar' );
+Query OK, 1 row affected (0.01 sec)
+
+UNIQUE KEY 制約
+◆ある列または列の組み合わせについて、
+テーブル内で重複を許さない制約
+➢ PRIMARY KEY の条件の1つと同じ、だが少し違う
+◆PRIMARY KEY 制約との違い
+1. 用途が異なる
+PRIMARY KEY 制約は、索引の意味合いが強い
+UNIQUE KEY 制約は、単純に重複を許さないだけ
+2. NULL を許容する
+◆UNIQUE KEY 制約の利用シーン
+➢データの性質上、重複が許されない場合,1つしかないアイテムの割り当て、など
+➢誤入力の予防
+◆UNIQUE KEY 制約を設定する書式
+➢書き方1(列のプロパティとして) MODIFY, CHANGE サブコマンド
+PRIMARY KEY と異なり、複数の列で設定してもOK
+`列名 ` データ型 [DEFAULT制約] [NOT NULL] UNIQUE
+➢書き方2(列の設定と同列)
+[CONSTRAINT 制約名 ] UNIQUE (列名1 , 列名2 , ...)
+◆既存テーブルに追加してみよう
+➢制約の追加は ALTER 命令(ADD サブコマンド)制約名は uni にしてみよう
+ALTER TABLE jugyou63 ADD CONSTRAINT uni UNIQUE (name);
+mysql> DESC jugyou63;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| arrival | date        | NO   | PRI | NULL    |       |
+| room    | varchar(3)  | NO   | PRI | NULL    |       |
+| name    | varchar(10) | YES  | UNI | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+3 rows in set (0.21 sec)
+
+◆削除方法1: ALTER TABLE 命令を用いる
+➢ MODIFY サブコマンド, CHANGE サブコマンドで上書き
+◆削除方法2: 制約を指定して削除
+ALTER TABLE テーブル名 DROP INDEX 制約名;
+➢ ALTER TABLE 命令の DROP サブコマンド
+➢ PRIMARY KEY 制約に限っては直接指定可能
+1つのテーブルに1つしかない制約のため
+ALTER TABLE テーブル名 DROP PRIMARY KEY;
+例：
+ALTER TABLE jugyou63 DROP INDEX uni;
+ALTER TABLE jugyou63 DROP PRIMARY KEY;
+mysql> ALTER TABLE jugyou63 DROP INDEX uni;
+Query OK, 0 rows affected (0.09 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> ALTER TABLE jugyou63 DROP PRIMARY KEY;
+Query OK, 3 rows affected (0.21 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> DESC jugyou63;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| arrival | date        | NO   |     | NULL    |       |
+| room    | varchar(3)  | NO   |     | NULL    |       |
+| name    | varchar(10) | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+
+インデックス
+◆インデックスを作成して検索速度を高速化
+➢検索を手助けする情報のこと
+◆インデックスとテーブル
+➢インデックスは、テーブル依存のデータベースオブジェクト
+通常は、テーブルの削除時に一緒に削除される
+◆インデックスがない場合
+➢全表走査(フルテーブルスキャン)
+端から順に、しらみつぶしに検索する方法
+1,000行あったら、最大で1,000回走査する
+◆インデックスがある場合
+➢ハッシュ
+ハッシュ関数: 同じ入力なら同じ出力を、入力が異なれ
+ば全く異なる出力をする関数
+◼出力が固定長 → データ格納先のアドレスとして利用
+➢バイナリサーチ(2分探索法)
+バイナリツリー(2分木)を用いる探索手法
+◆以下のようなデータに対して有効な手法
+➢値が重複していないこと
+➢順番に並んでいること(昇順 / 降順)
+➢検索に使う列が条件を満たしていればOK
+つまり PRIMARY KEY
+◆バイナリサーチの基本的なプロセス
+1. 列の中央値(真ん中に並んだ値)を取得
+2. 検索語が、その値より前か後かを判断
+3. 検索語がある方について、また1から繰り返す
+
+
+◆インデックス作成の基本構文
+CREATE INDEX インデックス名 ON テーブル名 (列名1 , ...);
+◆インデックス名の命名ルール
+➢基本ルールはテーブル名と同じ
+➢ インデックスはデータベースオブジェクト→ 他のオブジェクトとの重複は許されない
+Oracle や Db2: スキーマ内で重複を許さない
+MySQL や SQL Server: テーブル内で重複を許さない
+◆PRIMARY KEY 制約, UNIQUE KEY 制約では、インデックスは自動生成される
+➢ CONSTRAINT で設定した制約名がインデックス名に
+◆メリット
+➢検索速度の高速化、検索処理の軽量化
+全探索を回避
+目次や索引の恩恵と同じ
+◆デメリット
+➢テーブル変更処理の低速化
+内部処理として、インデックスの再生成が発生
+
+mysql> SELECT * FROM jugyou64;
++------+------------+
+| id   | v          |
++------+------------+
+|    1 | Apple      |
+|    2 | Orange     |
+|    3 | Strawberry |
++------+------------+
+3 rows in set (0.12 sec)
+
+mysql> DESC jugyou64;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| id    | int(3)      | YES  |     | NULL    |       |
+| v     | varchar(10) | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+2 rows in set (0.33 sec)
+
+mysql> SHOW INDEX FROM jugyou64;
+Empty set (0.32 sec)
+
+mysql> CREATE INDEX i64 ON jugyou64(id);
+Query OK, 0 rows affected (0.59 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> SHOW INDEX FROM jugyou64;
++----------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+------------+
+| Table    | Non_unique | Key_name | Seq_in_index | Column_name | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment | Visible | Expression |
++----------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+------------+
+| jugyou64 |          1 | i64      |            1 | id          | A         |           3 |     NULL |   NULL | YES  | BTREE      |         |               | YES     | NULL       |
++----------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+------------+
+1 row in set (0.06 sec)
+
+
+◆EXPLAIN 命令(MySQL)
+➢SQL 命令の実行状況を確認する命令
+➢RDBMS 依存、 SQL 標準ではないことに注意
+➢基本構文
+EXPLAIN 確認したいSQL命令 ;
+◆INDEX が使われるか確認してみよう
+➢WHERE 句に id を含む検索
+EXPLAIN SELECT * FROM jugyou64 WHERE id = 1;
+➢id を含まない検索(代わりに v 列を検索)
+EXPLAIN SELECT * FROM jugyou64 WHERE v = 'Apple';
+インデックスの削除
+◆DROP INDEX 命令
+➢基本構文
+DROP INDEX インデックス名 ON テーブル名 ;
+インデックス名はテーブル内で一意→ 列名の指定は不要
+◆インデックス i64 を削除してみよう
+例：
+DROP INDEX i64 ON jugyou64;
+➢インデックスが削除されたことを確認
+SHOW INDEX FROM jugyou64;
+
+◆ビュー
+ビューは、このサブクエリをデータベースオブジェクト化したもの
+◆SELECT 命令をオブジェクト化したもの
+➢ビューはあくまで命令であることがポイント
+通常のテーブルを実表、ビューを仮想表と呼ぶことも
+◆ビューを用いるメリット
+➢複雑な命令、よく使う命令をいつでも呼び出せる
+打ち間違いの防止、 SQL 命令のシンプル化
+➢容量を圧迫しない(仮想表)
+実体はただの SELECT 命令
+◆参照するたびに SELECT 命令が実行される
+➢重い処理のビューは、表示までに時間がかかる
+➢容量を圧迫しないが、計算リソースを圧迫する
+➢RDBMS 次第ではキャッシュを効かせられる場合も
+Materialized view など( MySQL には未実装)
+◆独立でない SELECT 命令はビューにできない
+➢相関サブクエリなど
+➢ビューではないが、関数化などで対応可能
+
+◆基本構文
+CREATE VIEW ビュー名 [(列名1, ...)] AS SELECT命令
+➢注意: 列名を指定する場合、全列への命名が必要
+◆ビューを作ってみよう
+➢列 v が ‘e’ で終わる行のみ表示するビュー ende
+CREATE VIEW ende AS SELECT * FROM jugyou64 WHERE v LIKE '%e';
+➢作成したビューを確認してみよう
+テーブルのように扱える
+SELECT * FROM ende;
+
+mysql> select * from jugyou64;
++------+------------+
+| id   | v          |
++------+------------+
+|    1 | Apple      |
+|    2 | Orange     |
+|    3 | Strawberry |
++------+------------+
+3 rows in set (0.11 sec)
+
+mysql> CREATE VIEW ende AS SELECT * FROM jugyou64 WHERE v LIKE '%E';
+Query OK, 0 rows affected (0.36 sec)
+
+mysql> select * from ende;
++------+--------+
+| id   | v      |
++------+--------+
+|    1 | Apple  |
+|    2 | Orange |
++------+--------+
+2 rows in set (0.04 sec)
+ビューの削除
+◆基本構文
+DROP VIEW ビュー名 ;
+◆ビュー ende を削除してみよう
+➢もう ende は使えない...
+DROP VIEW ende;
+SELECT * FROM ende
+
+在 SQL 中，视图是基于 SQL 语句的结果集的可视化的表。
+视图包含行和列，就像一个真实的表。视图中的字段就是来自一个或多个数据库中的真实的表中的字段。我们可以向视图添加 SQL 函数、WHERE 以及 JOIN 语句，我们也可以提交数据，就像这些来自于某个单一的表。
+注释：数据库的设计和结构不会受到视图中的函数、where 或 join 语句的影响。
+语法
+CREATE VIEW view_name AS
+SELECT column_name(s)
+FROM table_name
+WHERE condition
+注释：视图总是显示最近的数据。每当用户查询视图时，数据库引擎通过使用 SQL 语句来重建数据。
+
+
+

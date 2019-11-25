@@ -1,0 +1,785 @@
+#index
+◆集約関数
+➢COUNT, SUM, AVG, MIN, MAX
+➢DISTINCT
+◆行方向の集合
+➢GROUP BY 句
+◆集合を用いた絞り込み
+➢HAVING 句
+◆サブクエリ
+◆複数のテーブルを組み合わせる方法
+➢直積と交差結合
+➢内部結合
+➢外部結合
+
+◆行数のカウント
+集約関数 COUNT
+例1:
+SELECT * FROM jugyou51; #テーブルの中身を確認
++------+------+-------+
+| no   | name | stock |
++------+------+-------+
+|    1 | A    |    10 |
+|    2 | B    |     8 |
+|    3 | A    |    60 |
+|    4 | A    |    15 |
+|    5 | C    |     1 |
+|    6 | D    |     6 |
+|    7 | C    |     4 |
+|    8 | A    |    10 |
+|    9 | NULL |  NULL |
++------+------+-------+
+9 rows in set (0.00 sec)
+
+SELECT COUNT(*) FROM jugyou51; #引数に * を指定 ,テーブル全体の指定となる
++----------+
+| COUNT(*) |
++----------+
+|        9 |
++----------+
+1 row in set (0.07 sec)
+
+データの集合から、1つの値を返す
+
+例2:
+SELECT ROUND(no, -2) FROM jugyou51;
++--------------+
+| ROUND(no,-2) |
++--------------+
+|            0 |
+|            0 |
+|            0 |
+|            0 |
+|            0 |
+|            0 |
+|            0 |
+|            0 |
+|            0 |
++--------------+
+9 rows in set (0.01 sec)
+
+例3:
+SELECT COUNT(*) FROM jugyou51 WHERE no = 'A';
++----------+
+| COUNT(*) |
++----------+
+|        0 |
++----------+
+1 row in set, 1 warning (0.03 sec)
+
+SELECT COUNT(*) FROM jugyou51 WHERE stock < 10;
++----------+
+| COUNT(*) |
++----------+
+|        4 |
++----------+
+1 row in set (0.00 sec)
+
+SELECT COUNT(no), COUNT(name) FROM jugyou51;
++-----------+-------------+
+| COUNT(no) | COUNT(name) |
++-----------+-------------+
+|         9 |           8 |
++-----------+-------------+
+1 row in set (0.00 sec)
+
+注意：集約関数では NULL は無視される
+
+
+◆重複する値のないテーブルの取得
+➢ DISTINCT キーワードを使う
+使い方: 値の重複を取り除く列の直前に追記
+➢ name 列でやってみよう
+➢比較のため、 DISTINCT を外した場合も確認
+➢実は、省略時は ALL キーワードが指定されている
+SELECT * FROM jugyou51;
+SELECT DISTINCT 列名 FROM jugyou51;
+
+例1:
+SELECT DISTINCT name FROM jugyou51;
++------+
+| name |
++------+
+| A    |
+| B    |
+| C    |
+| D    |
+| NULL |
++------+
+5 rows in set (0.02 sec)
+SELECT name FROM jugyou51;
++------+
+| name |
++------+
+| A    |
+| B    |
+| A    |
+| A    |
+| C    |
+| D    |
+| C    |
+| A    |
+| NULL |
++------+
+9 rows in set (0.01 sec)
+
+SELECT ALL name FROM jugyou51; #省略時は ALL キーワードが指定されている
++------+
+| name |
++------+
+| A    |
+| B    |
+| A    |
+| A    |
+| C    |
+| D    |
+| C    |
+| A    |
+| NULL |
++------+
+9 rows in set (0.00 sec)
+
+例2:
+SELECT DISTINCT COUNT(name)FROM jugyou51;
++-------------+
+| COUNT(name) |
++-------------+
+|           8 |
++-------------+
+1 row in set (0.00 sec)
+
+SELECT COUNT(DISTINCT name)FROM jugyou51;
++----------------------+
+| COUNT(DISTINCT name) |
++----------------------+
+|                    4 |
++----------------------+
+1 row in set (0.02 sec)
+◆NULL は無視されることに注意
+
+◆合計値の計算
+SUM 集約関数: 指定した集合の合計値を計算
+➢書式
+SUM( [ALL | DISTINCT] 集合)
+➢省略すると ALL
+➢列を指定すれば,列の値の合計値を得られる
+➢ *は使えない
+例1:
+SELECT SUM(stock)FROM jugyou51;
++------------+
+| SUM(stock) |
++------------+
+|        114 |
++------------+
+1 row in set (0.00 sec)
+
+SELECT SUM(DISTINCT stock) FROM jugyou51;
++---------------------+
+| SUM(DISTINCT stock) |
++---------------------+
+|                 104 |
++---------------------+
+1 row in set (0.01 sec)
+
+➢数値型にしか使えない
+➢適用できないデータ型:日付型, 文字列型など
+➢NULL の扱い,COUNT 関数と同じく、 NULL は無視される
+
+◆集合の平均値の計算
+
+例1:
+SELECT SUM(stock)/COUNT(stock)FROM jugyou51;
++-------------------------+
+| SUM(stock)/COUNT(stock) |
++-------------------------+
+|                 14.2500 |
++-------------------------+
+1 row in set (0.03 sec)
+
+SELECT AVG(stock)FROM jugyou51;
++------------+
+| AVG(stock) |
++------------+
+|    14.2500 |
++------------+
+1 row in set (0.01 sec)
+◼数値型のみOK, NULL は無視
+◆応用: NULL を 0 とみなして再計算➢CASE 文を使う,NULL を 0 とみなして再計算
+例1:
+SELECT AVG(CASE WHEN stock IS NULL THEN 0 ELSE stock END) FROM jugyou51;
++----------------------------------------------------+
+| AVG(CASE WHEN stock IS NULL THEN 0 ELSE stock END) |
++----------------------------------------------------+
+|                                            12.6667 |
++----------------------------------------------------+
+1 row in set (0.01 sec)
+
+◆最小値, 最大値の抽出
+➢MIN 集約関数: 集合から最小値を抽出
+➢これまでの集約関数と異なり、文字列型, 日付型でもOK
+➢NULL が無視されるのは同じ
+◆MAX 集約関数: 集合から最大値を抽出
+➢これまでの集約関数と異なり、文字列型, 日付型でもOK
+➢NULL が無視されるのは同じ
+例1:
+SELECT MIN(stock), MAX(stock) FROM jugyou51; #カンマを忘れずに
++------------+------------+
+| MIN(stock) | MAX(stock) |
++------------+------------+
+|          1 |         60 |
++------------+------------+
+1 row in set (0.02 sec)
+
+◆これまで、任意の1列を集合として扱ってきた
+➢行方向に集合を作ることも可能
+➢同じ値を持つ行を1行にまとめる(集合にする)
+➢行方向の集合には GROUP BY 句を用いる
+➢GROUP BY 句の機能は、あくまでグループ化
+➢DISTINCT は重複の削除
+例1:
+SELECT name FROM jugyou51 GROUP BY name;
++------+
+| name |
++------+
+| A    |
+| B    |
+| C    |
+| D    |
+| NULL |
++------+
+5 rows in set (0.03 sec)
+この時点では DISTINCT と同じ効果に見える,SELECT DISTINCT name FROM jugyou51;
+例2:
+SELECT name,COUNT(name),SUM(stock) FROM jugyou51 GROUP BY name;
++------+-------------+------------+
+| name | COUNT(name) | SUM(stock) |
++------+-------------+------------+
+| A    |           4 |         95 |
+| B    |           1 |          8 |
+| C    |           2 |          5 |
+| D    |           1 |          6 |
+| NULL |           0 |       NULL |
++------+-------------+------------+
+5 rows in set (0.03 sec)
+SELECT name, stock FROM jugyou51 ORDER BY name;
++------+-------+
+| name | stock |
++------+-------+
+| NULL |  NULL |
+| A    |    10 |
+| A    |    60 |
+| A    |    15 |
+| A    |    10 |
+| B    |     8 |
+| C    |     1 |
+| C    |     4 |
+| D    |     6 |
++------+-------+
+9 rows in set (0.03 sec)
+例3:
+SELECT name, COUNT(name) FROM jugyou51 WHERE COUNT(name) = 1 GROUP BY name;
+ERROR 1111 (HY000): Invalid use of group function
+
+➢絞り込み処理は、GROUP BY 句より後でなければならない
+◆エラーの理由は内部処理の順序➢WHERE 句 → GROUP BY 句 → SELECT 句→ ORDER BY 句
+
+◆HAVING 句を用いる
+➢書き方の基本
+SELECT 列名, ... FROM テーブル名 GROUP BY 列名, ... HAVING 条件式 ;
+例1:
+SELECT name, COUNT(name) FROM jugyou51 GROUP BY name HAVING COUNT(name) = 1;
++------+-------------+
+| name | COUNT(name) |
++------+-------------+
+| B    |           1 |
+| D    |           1 |
++------+-------------+
+2 rows in set (0.01 sec)
+➢内部処理の順序 WHERE 句 → GROUP BY 句 → HAVING 句→ SELECT 句 → ORDER BY 句
+
+例2:
+➢GROUP BY 句で複数列を指定すればOK
+SELECT name, stock, COUNT(name) FROM jugyou51 GROUP BY name, stock;
++------+-------+-------------+
+| name | stock | COUNT(name) |
++------+-------+-------------+
+| A    |    10 |           2 |
+| B    |     8 |           1 |
+| A    |    60 |           1 |
+| A    |    15 |           1 |
+| C    |     1 |           1 |
+| D    |     6 |           1 |
+| C    |     4 |           1 |
+| NULL |  NULL |           0 |
++------+-------+-------------+
+8 rows in set (0.01 sec)
+
+◆サブクエリ
+➢サブクエリの基本構造
+SELECT 命令を括弧で囲みながら挿入,括弧内の結果が値として用いられる
+
+例1:
+SELECT * FROM jugyou51 WHERE stock = MIN(stock);
+ERROR 1111 (HY000): Invalid use of group function
+
+SELECT * FROM jugyou51 WHERE stock = (SELECT MIN(stock) FROM jugyou51);
++------+------+-------+
+| no   | name | stock |
++------+------+-------+
+|    5 | C    |     1 |
++------+------+-------+
+1 row in set (0.13 sec)
+
+例2:SELECT 句でサブクエリを使う
+SELECT (SELECT COUNT(*) FROM jugyou51),
+(SELECT MAX(stock) FROM jugyou51);
++---------------------------------+-----------------------------------+
+| (SELECT COUNT(*) FROM jugyou51) | (SELECT MAX(stock) FROM jugyou51) |
++---------------------------------+-----------------------------------+
+|                               9 |                                60 |
++---------------------------------+-----------------------------------+
+1 row in set (0.22 sec)
+
+#SELECT COUNT(*), MAX(stock) FROM jugyou51;と同じだが、複数テーブルでは通用しない
+
+例3:FROM 句でサブクエリを使う
+SELECT * FROM (SELECT no FROM jugyou51) AS st;
++------+
+| no   |
++------+
+|    1 |
+|    2 |
+|    3 |
+|    4 |
+|    5 |
+|    6 |
+|    7 |
+|    8 |
+|    9 |
++------+
+9 rows in set (0.04 sec)
+
+例4:
+INSERT INTO jugyou51 SELECT * FROM jugyou51 WHERE name = 'B';
+SELECT * FROM jugyou51;
++------+------+-------+
+| no   | name | stock |
++------+------+-------+
+|    1 | A    |    10 |
+|    2 | B    |     8 |
+|    3 | A    |    60 |
+|    4 | A    |    15 |
+|    5 | C    |     1 |
+|    6 | D    |     6 |
+|    7 | C    |     4 |
+|    8 | A    |    10 |
+|    9 | NULL |  NULL |
+|    2 | B    |     8 |
++------+------+-------+
+10 rows in set (0.00 sec)
+サブクエリだが、括弧は不要
+列の数と各列のデータ型を一致させる必要あり
+
+◆EXISTS 述語の基本構文
+[NOT] EXISTS ( SELECT 句 )
+➢SELECT 句の行が 存在する / しない を返答する
+➢NOT をつければ否定形
+#EXISTS用于检查子查询是否至少会返回一行数据，该子查询实际上并不返回任何数据，而是返回值True或False,EXISTS 指定一个子查询，检测行的存在。
+例1:
+SELECT * FROM jugyou53; #jugyou53 の中身を確認
++------+------+
+| no   | a    |
++------+------+
+|    1 | NULL |
+|    2 | NULL |
+|    3 | NULL |
+|    4 | NULL |
+|    5 | NULL |
++------+------+
+5 rows in set (0.31 sec)
+
+SELECT * FROM j53ref; #j53ref の中身を確認
++------+
+| no   |
++------+
+|    2 |
+|    4 |
++------+
+2 rows in set (0.07 sec)
+
+UPDATE jugyou53 SET a = 'Exist' WHERE EXISTS
+    -> ( SELECT * FROM j53ref WHERE j53ref.no = jugyou53.no); 
+Query OK, 2 rows affected (0.12 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+#jugyou53 の各行について、( jugyou53 の) no がj53ref の no にも存在するなら、aを “Exist” に更新
+
+SELECT * FROM jugyou53; #結果を確認
++------+-------+
+| no   | a     |
++------+-------+
+|    1 | NULL  |
+|    2 | Exist |
+|    3 | NULL  |
+|    4 | Exist |
+|    5 | NULL  |
++------+-------+
+5 rows in set (0.02 sec)
+
+◆IN 述語
+➢基本構文
+列名 [NOT] IN (集合)
+例1:
+SELECT * FROM jugyou53 WHERE no IN (2, 4);
++------+-------+
+| no   | a     |
++------+-------+
+|    2 | Exist |
+|    4 | Exist |
++------+-------+
+2 rows in set (0.04 sec)
+#SELECT * FROM jugyou53 WHERE no = 2 OR no = 4;
+例2:
+SELECT * FROM jugyou53 WHERE no IN (SELECT no FROM j53ref);
++------+-------+
+| no   | a     |
++------+-------+
+|    2 | Exist |
+|    4 | Exist |
++------+-------+
+2 rows in set (0.10 sec)
+
+◆和集合を取得してみよう,複数のテーブルを行方向に結合する
+➢基本構文: SELECT 文で集合を表現
+
+SELECT 列名, ... FROM テーブル名1
+UNION
+SELECT 列名, ... FROM テーブル名2
+UNION ...
+
+➢全ての集合について、
+列の数とそれぞれのデータ型が一致していること
+異なる列数、データ型では比較できないため
+
+例1:
+
+SELECT * FROM jugyou71b;
++------+
+| b    |
++------+
+|    2 |
+|    3 |
+|    4 |
+|    5 |
++------+
+
+SELECT * FROM jugyou53 WHERE no IN (SELECT no FROM j53ref);
++------+-------+
+| no   | a     |
++------+-------+
+|    2 | Exist |
+|    4 | Exist |
++------+-------+
+2 rows in set (0.10 sec)
+
+mysql> SELECT * FROM jugyou71b
+    -> UNION
+    -> SELECT * FROM jugyou71a;
++------+
+| b    |
++------+
+|    2 |
+|    3 |
+|    4 |
+|    5 |
+|    1 |
+|    7 |
+|    9 |
++------+
+7 rows in set (0.05 sec)
+jugyou71 と jugyou71b は同じ列数&データ型なので
+“SELECT * 〜” で問題なく動作した
+ SELECT * FROM juyou71a UNION SELECT id FROM jugyou64;
+ERROR 1146 (42S02): Table 'jugyou.juyou71a' doesn't exist
+
+和集合のソート
+SELECT a FROM jugyou71a
+UNION
+SELECT b FROM jugyou71b ORDER BY ソート列 ;
+例1:
+SELECT a AS c FROM jugyou71a
+    -> UNION
+    -> SELECT b AS c FROM jugyou71b ORDER BY c;
++------+
+| c    |
++------+
+|    1 |
+|    2 |
+|    3 |
+|    4 |
+|    5 |
+|    7 |
+|    9 |
++------+
+7 rows in set (0.08 sec)
+UNION では、重複が取り除かれているDISTINCT と同じ
+
+例1:
+SELECT * FROM jugyou71a
+UNION ALL
+SELECT * FROM jugyou71b;
++------+
+| a    |
++------+
+|    1 |
+|    3 |
+|    7 |
+|    9 |
+|    2 |
+|    3 |
+|    4 |
+|    5 |
++------+
+8 rows in set (0.01 sec)
+➢UNION ALL は重複の検出処理が不要→ UNION より高速に動作
+
+テーブルの結合,列方向に結合させること
+◆交差結合の方法
+SELECT * FROM テーブル1 , テーブル2 , ... ;
+
+mysql> SELECT * FROM yugyou71a;
+ERROR 1146 (42S02): Table 'jugyou.yugyou71a' doesn't exist
+mysql> SELECT * FROM jugyou71a;
++------+
+| a    |
++------+
+|    1 |
+|    3 |
+|    7 |
+|    9 |
++------+
+4 rows in set (0.01 sec)
+
+mysql> SELECT * FROM jugyou71b;
++------+
+| b    |
++------+
+|    2 |
+|    3 |
+|    4 |
+|    5 |
++------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT * FROM jugyou71a,jugyou71b;
++------+------+
+| a    | b    |
++------+------+
+|    1 |    2 |
+|    3 |    2 |
+|    7 |    2 |
+|    9 |    2 |
+|    1 |    3 |
+|    3 |    3 |
+|    7 |    3 |
+|    9 |    3 |
+|    1 |    4 |
+|    3 |    4 |
+|    7 |    4 |
+|    9 |    4 |
+|    1 |    5 |
+|    3 |    5 |
+|    7 |    5 |
+|    9 |    5 |
++------+------+
+16 rows in set (0.01 sec)
+◆交差結合では全ての組み合わせが得られる
+◆実際の場面では、特定の列をキーにして、値が同じ行同士の組み合わせだけを抽出することが多い
+
+内部結合を用いる具体例
+
+mysql> DESC jugyou72s;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| code  | int(4)      | NO   | PRI | NULL    |       |
+| name  | varchar(10) | YES  |     | NULL    |       |
+| price | int(4)      | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+3 rows in set (0.24 sec)
+
+mysql> DESC jugyou72z;
++-------+--------+------+-----+---------+-------+
+| Field | Type   | Null | Key | Default | Extra |
++-------+--------+------+-----+---------+-------+
+| code  | int(4) | NO   | PRI | NULL    |       |
+| stock | int(4) | YES  |     | NULL    |       |
++-------+--------+------+-----+---------+-------+
+2 rows in set (0.03 sec)
+
+mysql> SELECT * FROM jugyou72z;
++------+-------+
+| code | stock |
++------+-------+
+|    1 |    50 |
+|    2 |    10 |
+|    3 |   200 |
++------+-------+
+3 rows in set (0.08 sec)
+mysql> SELECT * FROM jugyou72s;
++------+-----------------+-------+
+| code | name            | price |
++------+-----------------+-------+
+|    1 | フライパン        |   700 |
+|    2 | 鍋              |   500 |
+|    3 | 洗濯バサミ       |   100 |
++------+-----------------+-------+
+3 rows in set (0.18 sec)
+
+mysql> SELECT * FROM jugyou72s, jugyou72z WHERE jugyou72s.code = jugyou72z.code ;
++------+-----------------+-------+------+-------+
+| code | name            | price | code | stock |
++------+-----------------+-------+------+-------+
+|    1 | フライパン      |   700 |    1 |    50 |
+|    2 | 鍋             |   500 |    2 |    10 |
+|    3 | 洗濯バサミ      |   100 |    3 |   200 |
++------+-----------------+-------+------+-------+
+3 rows in set (0.01 sec)
+
+➢今回の WHERE 句のような「交差結合から絞り込む条件式」を結合条件と呼ぶこともある
+➢必要な列のみに絞り込んでも良い“SELECT jugyou72s.name, jugyou72z.stock FROM ...”
+
+◆実は内部結合用にコマンド( INNER JOIN )が用意されている
+➢基本構造
+SELECT 列名1 , ... FROM テーブル1 INNER JOIN テーブル2 ON 結合条件
+同じ名前の列があるなら、列名は “テーブル名.列名”の書式で指定
+例1:
+mysql> SELECT * FROM jugyou72s INNER JOIN jugyou72z
+    -> ON jugyou72s.code = jugyou72z.code;
++------+-----------------+-------+------+-------+
+| code | name            | price | code | stock |
++------+-----------------+-------+------+-------+
+|    1 | フライパン      |   700 |    1 |    50 |
+|    2 | 鍋              |   500 |    2 |    10 |
+|    3 | 洗濯バサミ      |   100 |    3 |   200 |
++------+-----------------+-------+------+-------+
+3 rows in set (0.01 sec)
+
+mysql> SELECT * FROM jugyou73s;
++------+-----------------+-------+-------+
+| code | name            | price | mcode |
++------+-----------------+-------+-------+
+|    1 | フライパン      |   700 | M1    |
+|    2 | 鍋              |   500 | M1    |
+|    3 | 洗濯バサミ      |   100 | M2    |
++------+-----------------+-------+-------+
+3 rows in set (0.04 sec)
+
+例2:
+mysql> SELECT * FROM jugyou73m;
++-------+--------------------------+
+| mcode | mname                    |
++-------+--------------------------+
+| M1    | 調理具メーカー           |
+| M2    | 洗濯用品メーカー         |
++-------+--------------------------+
+2 rows in set (0.04 sec)
+
+mysql> SELECT * FROM jugyou73s INNER JOIN jugyou73m
+    -> ON jugyou73s.mcode = jugyou73m.mcode;
++------+-----------------+-------+-------+-------+--------------------------+
+| code | name            | price | mcode | mcode | mname                    |
++------+-----------------+-------+-------+-------+--------------------------+
+|    1 | フライパン      |   700 | M1    | M1    | 調理具メーカー           |
+|    2 | 鍋              |   500 | M1    | M1    | 調理具メーカー           |
+|    3 | 洗濯バサミ      |   100 | M2    | M2    | 洗濯用品メーカー         |
++------+-----------------+-------+-------+-------+--------------------------+
+3 rows in set (0.01 sec)
+◆内部結合は、「同じ値を持つ行同士の結合」
+➢一方にしか存在しない行は無視される
+
+例3:
+mysql> SELECT * FROM jugyou74s;
++------+-----------------+-------+
+| code | name            | price |
++------+-----------------+-------+
+|    1 | フライパン      |   700 |
+|    2 | 鍋              |   500 |
+|    3 | 洗濯バサミ      |   100 |
+|    4 | 包丁            |   800 |
++------+-----------------+-------+
+4 rows in set (0.06 sec)
+
+mysql> SELECT * FROM jugyou72z;
++------+-------+
+| code | stock |
++------+-------+
+|    1 |    50 |
+|    2 |    10 |
+|    3 |   200 |
++------+-------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT * FROM jugyou74s INNER JOIN jugyou72z
+    -> ON jugyou74s.code = jugyou72z.code;
++------+-----------------+-------+------+-------+
+| code | name            | price | code | stock |
++------+-----------------+-------+------+-------+
+|    1 | フライパン      |   700 |    1 |    50 |
+|    2 | 鍋              |   500 |    2 |    10 |
+|    3 | 洗濯バサミ      |   100 |    3 |   200 |
++------+-----------------+-------+------+-------+
+3 rows in set (0.01 sec)
+
+外部結合
+一方のテーブルを基準に判断 ➢ 「左テーブル基準」「右テーブル基準」の二種類
+➢基準テーブルの情報が優先して残される
+➢外部結合の基本構文
+SELECT 列名1 , ... FROM テーブル1 LEFT | RIGHT JOIN テーブル2 ON 結合条件 ;
+左テーブル基準: LEFT JOIN 右テーブル基準: RIGHT JOIN
+
+例1:
+
+mysql> SELECT * FROM jugyou74s;
++------+-----------------+-------+
+| code | name            | price |
++------+-----------------+-------+
+|    1 | フライパン      |   700 |
+|    2 | 鍋              |   500 |
+|    3 | 洗濯バサミ      |   100 |
+|    4 | 包丁            |   800 |
++------+-----------------+-------+
+4 rows in set (0.07 sec)
+
+mysql> SELECT * FROM jugyou72z;
++------+-------+
+| code | stock |
++------+-------+
+|    1 |    50 |
+|    2 |    10 |
+|    3 |   200 |
++------+-------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT * FROM jugyou74s LEFT JOIN jugyou72z
+    -> ON jugyou74s.code = jugyou72z.code;
++------+-----------------+-------+------+-------+
+| code | name            | price | code | stock |
++------+-----------------+-------+------+-------+
+|    1 | フライパン      |   700 |    1 |    50 |
+|    2 | 鍋              |   500 |    2 |    10 |
+|    3 | 洗濯バサミ      |   100 |    3 |   200 |
+|    4 | 包丁            |   800 | NULL |  NULL |
++------+-----------------+-------+------+-------+
+4 rows in set (0.05 sec)
+
+mysql> SELECT * FROM jugyou74s RIGHT JOIN jugyou72z
+    -> ON jugyou74s.code = jugyou72z.code;
++------+-----------------+-------+------+-------+
+| code | name            | price | code | stock |
++------+-----------------+-------+------+-------+
+|    1 | フライパン      |   700 |    1 |    50 |
+|    2 | 鍋              |   500 |    2 |    10 |
+|    3 | 洗濯バサミ      |   100 |    3 |   200 |
++------+-----------------+-------+------+-------+
+3 rows in set (0.00 sec)
+

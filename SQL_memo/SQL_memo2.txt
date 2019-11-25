@@ -1,0 +1,136 @@
+index
+◆SELECT 命令を用いた、テーブルの閲覧
+➢SELECT 句, FROM 句
+◆WHERE 句での絞り込み
+➢演算子(=, >, < など)
+➢IS (NOT) NULL
+➢LIKE 述語
+
+
+
+SELECT 命令: テーブルの表示
+◆mysql クライアントで SELECT 命令を発行
+◆テーブル名 で指定したテーブル中身を表示
+SELECT * FROM テーブル名
+* “全ての列” を表すメタ文字, ;命令の最後を表す
+例1:
+SELECT * FROM jugyou21;
+SELECT no, name FROM jugyou21;
+SELECT no, no, address, no FROM jugyou21;
+SELECT birthday, no, address, name FROM jugyou21;
+予約語とデータベースオブジェクト名
+予約語
+保留字（英語：Reserved word），有时也叫关键字（keyword），是编程语言中的一类语法结构。在特定的编程语言里，这些保留字具有较为特殊的意义，并且在语言的格式说明里被预先定义。通常，保留字包括用来支持类型系统的原始数据类型的标记，并可以用来识别诸如循环结构、语句块、条件、分支等程序结构。
+数据库对象有表，索引，视图，图表，缺省值，规则，触发器，用户，函数等。
+
+データ型
+数値型,文字列,日付時刻,
+◆NULL(ぬる)
+➢「何もない」「データが入っていない」ことを表す
+➢“0” と違う
+
+◆INTEGER型(int(最大桁数))
+➢数値を記憶できる
+➢ ただし整数のみ
+◆CHAR型(char(最大バイト数))
+➢文字列(character)を記憶できる
+➢固定長文字列
+記憶に使うデータ量が固定(余り䛿空白文字で埋められる)
+◆VARCHAR型(varchar(最大バイト数))
+➢文字列を記憶できる
+➢可変長文字列
+記憶に使うデータ量が文字列に合わせて変化
+◆DATE型
+➢ 日付を記憶できる
+➢ フォーマット: ‘年-月-日’
+2015年10月21日 → ‘2015-10-21’
+
+◆TIME型
+➢ 時刻を記憶できる
+➢ フォーマット: ‘HH:MM:SS[.fraction]’
+小数秒 fraction 省略可
+
+◆TIMESTAMP型
+➢ 日付+時刻
+◆YEAR型
+➢ 年を記憶できる
+➢ 2桁まで入力にも対応
+
+◆DESC コマンド
+➢Description 略
+➢テーブルの構造
+注意: SQL 文ではなく、MySQL特有のコマンド
+例1:
+DESC jugyou21;
+
+
+◆WHERE 句による行の絞り込み
+➢WHERE 句は FROM 句の後
+➢予約語 “WHERE” に続いて条件式を書く
+SELECT 列名 FROM テーブル名 WHERE 条件式
+例1:
+SELECT * FROM jugyou21 WHERE no = 2;
+SELECT no, name FROM jugyou21 WHERE no = 2;
+SELECT * FROM jugyou21 WHERE no <> 2;
+
+◆データ上に存在しない条件式
+SELECT * FROM jugyou21 WHERE no = 10;
+Empty set (0.01 sec)
+◆FROM 句と WHERE 句を入れ替えたら
+SELECT * WHERE no = 2 FROM jugyou21;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'FROM jugyou21' at line 1
+例２:
+SELECT * FROM jugyou21 WHERE name = '早稲田 太郎';
+SELECT * FROM jugyou21 WHERE birthday = '1882-10-21';
+SELECT * FROM jugyou21 WHERE birthday = NULL;
+SELECT * FROM jugyou21 WHERE birthday <> NULL;
+SELECT * FROM jugyou21 WHERE birthday IS NULL;
+SELECT * FROM jugyou21 WHERE birthday IS NOT NULL;
+演算子の注意
+◆全て半角表記
+➢ダメな例: 「=」「<=」(全角表記)
+◆演算子が2つ以上の記号で構成される場合、間にスペース不要、ダメな例: 「< =」
+➢記号の順番を変えない、ダメな例: 「=<」「=>」
+
+AND 演算子: 2つの条件式を両方満たす
+WHERE 条件式1 AND 条件式2
+WHERE 条件式1 OR 条件式2
+例1:
+SELECT * FROM jugyou22 WHERE a = 0 AND b = 0;
+SELECT * FROM jugyou22 WHERE a < 2 OR b < 2;
+注意：AND の方が OR より優先される、四則演算の掛け算(×)と足し算(+)の関係と同じ
+WHERE a = 2 OR a = 3 AND b = 2 OR b = 3;  “「a=2」また「a=3 且つ b=2」また「b=3」”
+➢括弧を使って OR を優先させる(四則演算と同じ)
+SELECT * FROM jugyou22 WHERE ( a = 2 OR a = 3 ) AND ( b = 2 OR b = 3) ;
+SELECT * FROM jugyou22 WHERE a = 2 OR a = 3 AND b = 2 OR b = 3;
+
+◆NOT 演算子の文法( WHERE 句)
+➢1つしか式項を見ていない→単項演算子
+例1:
+SELECT * FROM jugyou22 WHERE a < 2 OR b < 2;
+SELECT * FROM jugyou22 WHERE NOT ( a < 2 OR b < 2 ) ;
+
+◆“LIKE” 演算子(述語)を使うと部分一致での検索が可能
+➢LIKE を用いた WHERE 句䛾文法
+WHERE 列名 LIKE '文字列パターン '
+例1:
+SELECT * FROM jugyou21 WHERE birthday LIKE '18__-__-__';
+SELECT * FROM jugyou21 WHERE birthday LIKE '18%';
+SELECT * FROM jugyou21 WHERE address LIKE ‘%県%';
++------+---------------+----------+--------------------+
+| no   | name          | birthday | address            |
++------+---------------+----------+--------------------+
+|    2 | 所沢 花子     | NULL     | 埼玉県所沢市       |
+|    3 | 大隈 重信     | NULL     | 佐賀県佐賀市       |
++------+---------------+----------+--------------------+
+2 rows in set (0.01 sec)
+
+◆‘_’ また‘%’ 自体を検索したい場合、エスケープ文字 ‘¥’ を直前につける
+➢‘_’ を検索したい→‘¥_’, ‘%’ を検索したい→‘¥%’
+➢シングルクオートを1つ直前に追加する
+
+SELECT * FROM jugyou23 WHERE string LIKE '%¥%%';
+SELECT * FROM jugyou23 WHERE string LIKE '%It''s%';
+
+
+

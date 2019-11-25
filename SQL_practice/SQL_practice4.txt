@@ -1,0 +1,368 @@
+Last login: Sun Nov 24 00:40:16 on ttys000
+(base) youjiadeair:~ youjia$ mysql -u root -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 28
+Server version: 8.0.18 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2019, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| jugyou             |
+| mydb               |
+| mysql              |
+| performance_schema |
+| sys                |
+| test               |
++--------------------+
+7 rows in set (0.05 sec)
+
+mysql> use jugyou;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> show tables;
++------------------+
+| Tables_in_jugyou |
++------------------+
+| disney           |
+| jugyou21         |
+| jugyou22         |
+| jugyou23         |
+| jugyou31         |
+| jugyou32         |
+| jugyou33         |
+| jugyou34         |
+| jugyou35         |
+| jugyou36         |
+| jugyou37         |
+| jugyou41         |
+| jugyou42         |
+| jugyou43         |
+| jugyou44         |
+| pi200            |
++------------------+
+16 rows in set (0.01 sec)
+
+mysql> SELECT * FROM jugyou41;
+Empty set (0.01 sec)
+
+mysql> DESC jugyou41;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| no       | int(11)     | NO   |     | NULL    |       |
+| name     | varchar(30) | YES  |     | NULL    |       |
+| birthday | date        | YES  |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+3 rows in set (0.16 sec)
+
+mysql> INSERT INTO jugyou41 VALUES (1,'SUSAN','19890823');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> INSER INTO jugyou41 (name,no) VALUES('JOHN','2');
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'INSER INTO jugyou41 (name,no) VALUES('JOHN','2')' at line 1
+mysql> INSERT INTO jugyou41 (name,no) VALUES('JOHN','2');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT * FROM jugyou41;
++----+-------+------------+
+| no | name  | birthday   |
++----+-------+------------+
+|  1 | SUSAN | 1989-08-23 |
+|  2 | JOHN  | NULL       |
++----+-------+------------+
+2 rows in set (0.00 sec)
+
+mysql> DESC jugyou41;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| no       | int(11)     | NO   |     | NULL    |       |
+| name     | varchar(30) | YES  |     | NULL    |       |
+| birthday | date        | YES  |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+
+mysql> INSERT INTO jugyou41 VALUES('NULL','NULL','NULL');
+ERROR 1366 (HY000): Incorrect integer value: 'NULL' for column 'no' at row 1
+mysql> INSERT INTO jugyou41 VALUES(NULL,NULL,NULL);
+ERROR 1048 (23000): Column 'no' cannot be null
+mysql> INSERT INTO jugyou41 VALUES(3,NULL,NULL);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> SELECT * FROM jugyou41;
++----+-------+------------+
+| no | name  | birthday   |
++----+-------+------------+
+|  1 | SUSAN | 1989-08-23 |
+|  2 | JOHN  | NULL       |
+|  3 | NULL  | NULL       |
++----+-------+------------+
+3 rows in set (0.03 sec)
+
+mysql> DESC jugyou42;
++-------+--------+------+-----+---------+-------+
+| Field | Type   | Null | Key | Default | Extra |
++-------+--------+------+-----+---------+-------+
+| no    | int(2) | NO   |     | NULL    |       |
+| price | int(8) | YES  |     | 0       |       |
++-------+--------+------+-----+---------+-------+
+2 rows in set (0.09 sec)
+
+mysql> INSERT INTO jugyou42 VALUES(1,10);
+Query OK, 1 row affected (0.13 sec)
+
+mysql> SELECT * FROM jugyou42;
++----+-------+
+| no | price |
++----+-------+
+|  1 |    10 |
++----+-------+
+1 row in set (0.07 sec)
+
+mysql> INSERT INTO jugyou42 VALUES(2,DEFAULT);
+Query OK, 1 row affected (0.07 sec)
+
+mysql> SELECT * FROM jugyou42;
++----+-------+
+| no | price |
++----+-------+
+|  1 |    10 |
+|  2 |     0 |
++----+-------+
+2 rows in set (0.01 sec)
+
+mysql> INSERT INTO jugyou42(no) VALUES(3);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> SELECT * FROM jugyou42;
++----+-------+
+| no | price |
++----+-------+
+|  1 |    10 |
+|  2 |     0 |
+|  3 |     0 |
++----+-------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT * FROM jugyou42;
++----+-------+
+| no | price |
++----+-------+
+|  1 |    10 |
+|  2 |     0 |
+|  3 |     0 |
++----+-------+
+3 rows in set (0.01 sec)
+
+mysql> DELETE FROM jugyou42;
+Query OK, 3 rows affected (0.05 sec)
+
+mysql> SELECT * FROM jugyou42;
+Empty set (0.00 sec)
+
+mysql> SELECT * FROM jugyou41;
++----+-------+------------+
+| no | name  | birthday   |
++----+-------+------------+
+|  1 | SUSAN | 1989-08-23 |
+|  2 | JOHN  | NULL       |
+|  3 | NULL  | NULL       |
++----+-------+------------+
+3 rows in set (0.13 sec)
+
+mysql> DELETE FROM jugyou41 WHERE no=3;
+Query OK, 1 row affected (0.09 sec)
+
+mysql> SELECT * FROM jugyou41;
++----+-------+------------+
+| no | name  | birthday   |
++----+-------+------------+
+|  1 | SUSAN | 1989-08-23 |
+|  2 | JOHN  | NULL       |
++----+-------+------------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT * FROM jugyou43;
++------------+-------------+
+| ts         | temperature |
++------------+-------------+
+| 2019-04-05 |          25 |
+| 2019-04-04 |          23 |
+| 2019-04-03 |          19 |
+| 2019-04-02 |          26 |
+| 2019-04-01 |          23 |
++------------+-------------+
+5 rows in set (0.03 sec)
+
+mysql> SELECT * FROM jugyou43 ORDER BY ts LIMIT 1;
++------------+-------------+
+| ts         | temperature |
++------------+-------------+
+| 2019-04-01 |          23 |
++------------+-------------+
+1 row in set (0.03 sec)
+
+mysql> DELETE * FROM jugyou43 ORDER BY ts LIMIT 1;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '* FROM jugyou43 ORDER BY ts LIMIT 1' at line 1
+mysql> DELETE FROM jugyou43 ORDER BY ts LIMIT 1;
+Query OK, 1 row affected (0.10 sec)
+
+mysql> SELECT * FROM jugyou43;
++------------+-------------+
+| ts         | temperature |
++------------+-------------+
+| 2019-04-05 |          25 |
+| 2019-04-04 |          23 |
+| 2019-04-03 |          19 |
+| 2019-04-02 |          26 |
++------------+-------------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT * FROM jugyou41;
++----+-------+------------+
+| no | name  | birthday   |
++----+-------+------------+
+|  1 | SUSAN | 1989-08-23 |
+|  2 | JOHN  | NULL       |
++----+-------+------------+
+2 rows in set (0.01 sec)
+
+mysql> UPDATE jugyou41 SET birthday = CURRENT_DATE WHERE no=2;
+Query OK, 1 row affected (0.10 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> SELECT * FROM jugyou41;
++----+-------+------------+
+| no | name  | birthday   |
++----+-------+------------+
+|  1 | SUSAN | 1989-08-23 |
+|  2 | JOHN  | 2019-11-24 |
++----+-------+------------+
+2 rows in set (0.02 sec)
+
+mysql> SELECT * FROM jugyou41;
++----+-------+------------+
+| no | name  | birthday   |
++----+-------+------------+
+|  1 | SUSAN | 1989-08-23 |
+|  2 | JOHN  | 2019-11-24 |
++----+-------+------------+
+2 rows in set (0.01 sec)
+
+mysql> UPDATE jugyou41 no = no + 1;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '= no + 1' at line 1
+mysql> UPDATE jugyou41 SET no = no + 1;
+Query OK, 2 rows affected (0.02 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+mysql> SELECT * FROM jugyou41;
++----+-------+------------+
+| no | name  | birthday   |
++----+-------+------------+
+|  2 | SUSAN | 1989-08-23 |
+|  3 | JOHN  | 2019-11-24 |
++----+-------+------------+
+2 rows in set (0.00 sec)
+
+mysql> UPDATE jugyou41 SET birthday = birthday - INTERVAL no DAY;
+Query OK, 2 rows affected (0.04 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+mysql> SELECT * FROM jugyou41;
++----+-------+------------+
+| no | name  | birthday   |
++----+-------+------------+
+|  2 | SUSAN | 1989-08-21 |
+|  3 | JOHN  | 2019-11-21 |
++----+-------+------------+
+2 rows in set (0.00 sec)
+
+mysql> UPDATE jugyou41 SET no = 1, birthday = '2019-01-01';
+Query OK, 2 rows affected (0.03 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+mysql> SELECT * FROM jugyou41;
++----+-------+------------+
+| no | name  | birthday   |
++----+-------+------------+
+|  1 | SUSAN | 2019-01-01 |
+|  1 | JOHN  | 2019-01-01 |
++----+-------+------------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT * FROM jugyou44;
++------+------+------+
+| no   | a    | b    |
++------+------+------+
+|    0 |   10 | NULL |
+|    1 |   10 | NULL |
+|    2 |   10 | NULL |
++------+------+------+
+3 rows in set (0.05 sec)
+
+mysql> UPDATE jugyou44 SET a=a+1,b=a WHERE no=1;
+Query OK, 1 row affected (0.03 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> SELECT * FROM jugyou44;
++------+------+------+
+| no   | a    | b    |
++------+------+------+
+|    0 |   10 | NULL |
+|    1 |   11 |   11 |
+|    2 |   10 | NULL |
++------+------+------+
+3 rows in set (0.00 sec)
+
+mysql> UPDATE jugyou44 SET b=a,a=a+1 WHERE no=2;
+Query OK, 1 row affected (0.05 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> SELECT * FROM jugyou44;
++------+------+------+
+| no   | a    | b    |
++------+------+------+
+|    0 |   10 | NULL |
+|    1 |   11 |   11 |
+|    2 |   11 |   10 |
++------+------+------+
+3 rows in set (0.01 sec)
+
+mysql> DESC jugyou44;
++-------+--------+------+-----+---------+-------+
+| Field | Type   | Null | Key | Default | Extra |
++-------+--------+------+-----+---------+-------+
+| no    | int(1) | YES  |     | NULL    |       |
+| a     | int(6) | YES  |     | NULL    |       |
+| b     | int(6) | YES  |     | NULL    |       |
++-------+--------+------+-----+---------+-------+
+3 rows in set (0.36 sec)
+
+mysql> UPDATE jugyou44 SET b=NULL WHERE no>=1;
+Query OK, 2 rows affected (0.02 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+mysql> SELECT * FROM jugyou44;
++------+------+------+
+| no   | a    | b    |
++------+------+------+
+|    0 |   10 | NULL |
+|    1 |   11 | NULL |
+|    2 |   11 | NULL |
++------+------+------+
+3 rows in set (0.01 sec)
+
+mysql> 

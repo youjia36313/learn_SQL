@@ -1,0 +1,119 @@
+#SQL
+
+#数据库(Database) 是按照数据机构来组织、存偖和管理数据的仓库
+#结构化查询语言(Structured Query Language) 简称
+SQL，是上世纪70年代由IBM公司开发，用于对数据库进行操作的语言。
+SQL 是一种数据库查询和程序设计语言，用于存取数据以及查询、更新和管理关系数据库系统，同时也是数据库脚本文件的扩展名。
+
+#先要检查Linux系统中是否已经安装了MySQL，输入命令尝试打开MySQL服务:
+sudo service mysql start
+如果提示 mysql: unrecognized service，则说明没有安装
+
+#linux安装mysql
+#安装MySQL服务端、核心程序
+sudo apt-get install mysql-server
+#安装MySQL 客户端
+sudo apt-get install mysql-client
+在安装过程中会提示确认输入YES,设置root用户密码(之后也可以修改)等，稍等片刻便可安装成功。
+#安装结束后，用命令验证是否安装并启动成功: 
+sudo netstat -tap| grep mysql
+此时，可以根据自己的需求，用gedit修改MySQL的配置文件(my.cnf) ,使用以下命令: 
+sudo gedit /etc/mysql/ my. cnf
+至此，MySQL 已经安装、配置完成，可以正常使用了。
+
+#打开root登录
+使用如下两条命令，打开MySQL服务并使用root用户登录:
+#启动MySQL服务
+sudo service mysql start
+#使用root 用户登录，实验楼环境的密码为空，直接回车就可以登
+mysql -u root
+
+#查看数据库
+使用命令 show databases; 查看有哪些数据库(注意不要漏掉分号;)
+#连接数据库
+选择连接其中一个数据库，语句格式为use <数据库名>，这里可以不用加分号，
+例如，连接information_ schema数据库:
+use information_schema
+#查看表
+使用命令show tables; 查看数据库中有哪些表(注意不要漏掉";")
+#退出MySQL。
+使用命令 quit或者exit
+
+#创建一个数据库，mysqL_ shiyan，
+语句格式为CREATE DATABASE <数据库名字>;，(注意不要漏掉分号 ;),前面的CREATEDATABASE也可以使用小写
+CREATE DATABASE mysql_ shiyan;
+
+#创建表
+mysql> CREATE TABLE department
+-> (dpt_name CHAR(20),
+-> dpt_phone INT(12)
+-> );
+Query OK, 0 rows affected (8.04 sec)mysql> show tables
+-> show tables;
+
+CREATE TABLE employee
+(id INT(10),
+name CHAR(20),
+phone INT(12)
+);
+
+#数据类型
+INT 整数 4byte
+FLOAT 单精度浮点数 4byte
+DOUBLE 双精度浮点数单选 8byte
+ENUM 单选比如性别ENUM('a','b',c')
+SET多选SET('1','2','3')
+DATE 日期 YYYY-MM-DD 3byte
+TIME 时间点或持续时间HH:MM:SS 3byte
+YEAR 年份值 YYYY 1byte
+CHAR 0~255byte 定长字符串
+VARCHAR 0~255byte 变长字符串
+TEXT 0~65535byte 长文本数据
+
+#整数除了INT外，还有TINYINT、SMALINT、MEDIUMINT、BIGINT
+#CHAR和VARCHAR的区别: 
+CHAR的长度是固定的，而VARCHAR的长度是可以变化的，
+存储字符串"abc"，
+对于CHAR(10)，表示存储的字符将占10个字节(包括7个空字符)，
+VARCHAR(12)则只占用4个字节的长度，增加一个额外字节来存储字符串本身的长度，
+12只是最大值，当你存储的字符小于12时，按实际长度存储。
+我们在存储时字符串右边不能有空格，即使有，查询出来后也会被删除。在存储或检索过程中不进行大小写转换。
+
+#ENUM和SET的区别: 
+ENUM类型的数据的值，必须是定义时枚举的值的其中之一，即单选，而SET类型的值则可以多选。
+
+DECIMAL(M,D)，其中M表示十进制数字总的个数，D表示小数点后面数字的位数
+精度要求非常高的计算中，这种类型允许指定数值的精度和计数方法作为选择参数。
+精度在这里指为这个值保存的有效数字的总个数，而计数方法表示小数点后数字的位数。
+比如语句 DECIMAL(7,3) 规定了存储的值不会超过 7 位数字，并且小数点后不超过 3 位。
+
+MySql中的浮点类型有float，double和real。
+他们定义方式为：FLOAT(M,D) 、 REAL(M,D) 、 DOUBLE PRECISION(M,D)。
+REAL就是DOUBLE ，如果SQL服务器模式包括REAL_AS_FLOAT选项，REAL是FLOAT的同义词而不是DOUBLE的同义词。
+M取值范围为0~255。
+FLOAT只保证6位有效数字的准确性，所以FLOAT(M,D)中，M<=6时，数字通常是准确的。如果M和D都有明确定义，其超出范围后的处理同decimal。
+D取值范围为0~30，同时必须<=M。
+double只保证16位有效数字的准确性，所以DOUBLE(M,D)中，M<=16时，数字通常是准确的。如果M和D都有明确定义，其超出范围后的处理同decimal。
+
+插入数据
+mysql> SELECT * FROM employee;
+Empty set (0.02 sec)
+mysql> INSERT INTO employee (id, name phone )VALUES(81,'TOM' ,110118118);
+Query OK, 1 row affected (8.88 sec)
+mysql> INSERT INTO employee VALUES(O2, 'Jack' 119119119);
+Query OK, 1 row affected (8.80 sec)
+mysql> INSERT INTO employee (id, name ) VALUES(83, 'Rose' );
+Query OK, 1 row affected (0.81 sec)
+
+CHAR型需要单引号，VARCHAR,TEXT,DATE,TIME,ENUM等类型的数据也需要单引号修饰，而INT,FLOAT,DOUBLE等则不需要。
+
+#practice
+create database library;
+use library;
+create table book(
+book_ id int primary key ,
+book_ name varchar(50) not null);
+
+create table reader(
+reader_ id int primary key,
+reader_ name varchar(50) not null);

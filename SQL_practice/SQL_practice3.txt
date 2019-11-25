@@ -1,0 +1,425 @@
+Last login: Sun Nov 24 20:35:51 on ttys000
+(base) youjiadeMacBook-Air:~ youjia$ mysql -u root -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 31
+Server version: 8.0.18 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2019, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use jugyou;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> SELECT * FROM jugyou31 ORDER BY age;
++------+---------------+------+----------+-----------------+
+| no   | name          | age  | age_char | address         |
++------+---------------+------+----------+-----------------+
+|    1 | 田中 太郎     |    1 | 1        | とうきょう      |
+|    3 | 石井 二郎     |    3 | 3        | かながわ        |
+|    5 | 大石 佐介     |   10 | 10       | かがわ          |
+|    4 | 鹿島 道久     |   15 | 15       | かごしま        |
+|    2 | 佐藤 花子     |   30 | 30       | あいち          |
++------+---------------+------+----------+-----------------+
+5 rows in set (0.01 sec)
+
+mysql> SELECT * FROM jugyou31 ORDER BY age ASC;
++------+---------------+------+----------+-----------------+
+| no   | name          | age  | age_char | address         |
++------+---------------+------+----------+-----------------+
+|    1 | 田中 太郎     |    1 | 1        | とうきょう      |
+|    3 | 石井 二郎     |    3 | 3        | かながわ        |
+|    5 | 大石 佐介     |   10 | 10       | かがわ          |
+|    4 | 鹿島 道久     |   15 | 15       | かごしま        |
+|    2 | 佐藤 花子     |   30 | 30       | あいち          |
++------+---------------+------+----------+-----------------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT * FROM jugyou31 ORDER BY age DESC;
++------+---------------+------+----------+-----------------+
+| no   | name          | age  | age_char | address         |
++------+---------------+------+----------+-----------------+
+|    2 | 佐藤 花子     |   30 | 30       | あいち          |
+|    4 | 鹿島 道久     |   15 | 15       | かごしま        |
+|    5 | 大石 佐介     |   10 | 10       | かがわ          |
+|    3 | 石井 二郎     |    3 | 3        | かながわ        |
+|    1 | 田中 太郎     |    1 | 1        | とうきょう      |
++------+---------------+------+----------+-----------------+
+5 rows in set (0.00 sec)
+
+mysql> 
+mysql> ^C
+mysql> SELECT * FROM jugyou31 ORDER BY age DESC;
++------+---------------+------+----------+-----------------+
+| no   | name          | age  | age_char | address         |
++------+---------------+------+----------+-----------------+
+|    2 | 佐藤 花子     |   30 | 30       | あいち          |
+|    4 | 鹿島 道久     |   15 | 15       | かごしま        |
+|    5 | 大石 佐介     |   10 | 10       | かがわ          |
+|    3 | 石井 二郎     |    3 | 3        | かながわ        |
+|    1 | 田中 太郎     |    1 | 1        | とうきょう      |
++------+---------------+------+----------+-----------------+
+5 rows in set (0.01 sec)
+
+mysql> 
+mysql> SELECT * FROM jugyou31 ORDER BY age DESC;
++------+---------------+------+----------+-----------------+
+| no   | name          | age  | age_char | address         |
++------+---------------+------+----------+-----------------+
+|    2 | 佐藤 花子     |   30 | 30       | あいち          |
+|    4 | 鹿島 道久     |   15 | 15       | かごしま        |
+|    5 | 大石 佐介     |   10 | 10       | かがわ          |
+|    3 | 石井 二郎     |    3 | 3        | かながわ        |
+|    1 | 田中 太郎     |    1 | 1        | とうきょう      |
++------+---------------+------+----------+-----------------+
+5 rows in set (0.00 sec)
+
+mysql> 
+mysql> SELECT * FROM jugyou31 ORDER BY age DESC;
++------+---------------+------+----------+-----------------+
+| no   | name          | age  | age_char | address         |
++------+---------------+------+----------+-----------------+
+|    2 | 佐藤 花子     |   30 | 30       | あいち          |
+|    4 | 鹿島 道久     |   15 | 15       | かごしま        |
+|    5 | 大石 佐介     |   10 | 10       | かがわ          |
+|    3 | 石井 二郎     |    3 | 3        | かながわ        |
+|    1 | 田中 太郎     |    1 | 1        | とうきょう      |
++------+---------------+------+----------+-----------------+
+5 rows in set (0.00 sec)
+
+mysql> 
+mysql> SELECT * FROM jugyou31 ORDER BY age DESC;
++------+---------------+------+----------+-----------------+
+| no   | name          | age  | age_char | address         |
++------+---------------+------+----------+-----------------+
+|    2 | 佐藤 花子     |   30 | 30       | あいち          |
+|    4 | 鹿島 道久     |   15 | 15       | かごしま        |
+|    5 | 大石 佐介     |   10 | 10       | かがわ          |
+|    3 | 石井 二郎     |    3 | 3        | かながわ        |
+|    1 | 田中 太郎     |    1 | 1        | とうきょう      |
++------+---------------+------+----------+-----------------+
+5 rows in set (0.00 sec)
+
+mysql> 
+mysql> SELECT * FROM jugyou31 ORDER BY address;
++------+---------------+------+----------+-----------------+
+| no   | name          | age  | age_char | address         |
++------+---------------+------+----------+-----------------+
+|    2 | 佐藤 花子     |   30 | 30       | あいち          |
+|    5 | 大石 佐介     |   10 | 10       | かがわ          |
+|    4 | 鹿島 道久     |   15 | 15       | かごしま        |
+|    3 | 石井 二郎     |    3 | 3        | かながわ        |
+|    1 | 田中 太郎     |    1 | 1        | とうきょう      |
++------+---------------+------+----------+-----------------+
+5 rows in set (0.01 sec)
+
+mysql> SELECT * FROM jugyou31 ORDER BY name;
++------+---------------+------+----------+-----------------+
+| no   | name          | age  | age_char | address         |
++------+---------------+------+----------+-----------------+
+|    2 | 佐藤 花子     |   30 | 30       | あいち          |
+|    5 | 大石 佐介     |   10 | 10       | かがわ          |
+|    1 | 田中 太郎     |    1 | 1        | とうきょう      |
+|    3 | 石井 二郎     |    3 | 3        | かながわ        |
+|    4 | 鹿島 道久     |   15 | 15       | かごしま        |
++------+---------------+------+----------+-----------------+
+5 rows in set (0.01 sec)
+
+mysql> SELECT * FROM jugyou31 ORDER BY age;
++------+---------------+------+----------+-----------------+
+| no   | name          | age  | age_char | address         |
++------+---------------+------+----------+-----------------+
+|    1 | 田中 太郎     |    1 | 1        | とうきょう      |
+|    3 | 石井 二郎     |    3 | 3        | かながわ        |
+|    5 | 大石 佐介     |   10 | 10       | かがわ          |
+|    4 | 鹿島 道久     |   15 | 15       | かごしま        |
+|    2 | 佐藤 花子     |   30 | 30       | あいち          |
++------+---------------+------+----------+-----------------+
+5 rows in set (0.10 sec)
+
+mysql> SELECT * FROM jugyou31 ORDER BY age_char;
++------+---------------+------+----------+-----------------+
+| no   | name          | age  | age_char | address         |
++------+---------------+------+----------+-----------------+
+|    1 | 田中 太郎     |    1 | 1        | とうきょう      |
+|    5 | 大石 佐介     |   10 | 10       | かがわ          |
+|    4 | 鹿島 道久     |   15 | 15       | かごしま        |
+|    3 | 石井 二郎     |    3 | 3        | かながわ        |
+|    2 | 佐藤 花子     |   30 | 30       | あいち          |
++------+---------------+------+----------+-----------------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT * FROM jugyou32 ORDER BY team, score;
++---------------+------+-------+
+| name          | team | score |
++---------------+------+-------+
+| 田中 太郎     | A    |    50 |
+| 鹿島 道久     | A    |    85 |
+| 石井 二郎     | B    |    45 |
+| 大石 佐介     | B    |    50 |
+| 佐藤 花子     | B    |    60 |
++---------------+------+-------+
+5 rows in set (0.02 sec)
+
+mysql> SELECT * FROM jugyou32 ORDER BY team ASC, score DESC;
++---------------+------+-------+
+| name          | team | score |
++---------------+------+-------+
+| 鹿島 道久     | A    |    85 |
+| 田中 太郎     | A    |    50 |
+| 佐藤 花子     | B    |    60 |
+| 大石 佐介     | B    |    50 |
+| 石井 二郎     | B    |    45 |
++---------------+------+-------+
+5 rows in set (0.01 sec)
+
+mysql> SELECT * FROM jugyou33 LIMIT 5 OFFSET 1;
++------+
+| no   |
++------+
+|    2 |
+|    3 |
+|    4 |
+|    5 |
+|    6 |
++------+
+5 rows in set (0.01 sec)
+
+mysql> SELECT * FROM jugyou33 WHERE no >= 5 LIMIT 3;
++------+
+| no   |
++------+
+|    5 |
+|    6 |
+|    7 |
++------+
+3 rows in set (0.03 sec)
+
+mysql> SELECT * FROM jugyou33 WHERE no <= 5 ORDER BY no DESC LIMIT 3;
++------+
+| no   |
++------+
+|    5 |
+|    4 |
+|    3 |
++------+
+3 rows in set (0.01 sec)
+
+mysql> SELECT *, price * stock FROM jugyou34;
++-----------+-------+-------+------+---------------+
+| name      | price | stock | unit | price * stock |
++-----------+-------+-------+------+---------------+
+| りんご    |   120 |     5 | 個   |           600 |
+| バナナ    |    98 |    10 | 房   |           980 |
+| いちご    |   130 |     2 | 箱   |           260 |
++-----------+-------+-------+------+---------------+
+3 rows in set (0.05 sec)
+
+mysql> SELECT *, price * stock AS amount FROM jugyou34;
++-----------+-------+-------+------+--------+
+| name      | price | stock | unit | amount |
++-----------+-------+-------+------+--------+
+| りんご    |   120 |     5 | 個   |    600 |
+| バナナ    |    98 |    10 | 房   |    980 |
+| いちご    |   130 |     2 | 箱   |    260 |
++-----------+-------+-------+------+--------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT name AS hoge FROM jugyou34;
++-----------+
+| hoge      |
++-----------+
+| りんご    |
+| バナナ    |
+| いちご    |
++-----------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT name AS `ほげ` FROM jugyou34;
++-----------+
+| ほげ      |
++-----------+
+| りんご    |
+| バナナ    |
+| いちご    |
++-----------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT *, price * stock AS amount FROM jugyou34 WHERE amount < 500;
+ERROR 1054 (42S22): Unknown column 'amount' in 'where clause'
+mysql> SELECT *, price * stock AS amount FROM jugyou34 WHERE price * stock < 500;
++-----------+-------+-------+------+--------+
+| name      | price | stock | unit | amount |
++-----------+-------+-------+------+--------+
+| いちご    |   130 |     2 | 箱   |    260 |
++-----------+-------+-------+------+--------+
+1 row in set (0.01 sec)
+
+mysql> SELECT price, ROUND(price) FROM jugyou35;
++--------+--------------+
+| price  | ROUND(price) |
++--------+--------------+
+| 120.50 |          121 |
+|  98.00 |           98 |
+| 130.49 |          130 |
++--------+--------------+
+3 rows in set (0.05 sec)
+
+mysql> SELECT price, ROUND(price, 1) FROM jugyou35;
++--------+-----------------+
+| price  | ROUND(price, 1) |
++--------+-----------------+
+| 120.50 |           120.5 |
+|  98.00 |            98.0 |
+| 130.49 |           130.5 |
++--------+-----------------+
+3 rows in set (0.01 sec)
+
+mysql> SELECT price, ROUND(price, 2) FROM jugyou35;
++--------+-----------------+
+| price  | ROUND(price, 2) |
++--------+-----------------+
+| 120.50 |          120.50 |
+|  98.00 |           98.00 |
+| 130.49 |          130.49 |
++--------+-----------------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT price, ROUND(price, -1) FROM jugyou35;
++--------+------------------+
+| price  | ROUND(price, -1) |
++--------+------------------+
+| 120.50 |              120 |
+|  98.00 |              100 |
+| 130.49 |              130 |
++--------+------------------+
+3 rows in set (0.02 sec)
+
+mysql> SELECT stock, unit, CONCAT(stock, unit) from jugyou34;
++-------+------+---------------------+
+| stock | unit | CONCAT(stock, unit) |
++-------+------+---------------------+
+|     5 | 個   | 5個                 |
+|    10 | 房   | 10房                |
+|     2 | 箱   | 2箱                 |
++-------+------+---------------------+
+3 rows in set (0.03 sec)
+
+mysql> SELECT SUBSTRING('20190401', 5, 2);
++-----------------------------+
+| SUBSTRING('20190401', 5, 2) |
++-----------------------------+
+| 04                          |
++-----------------------------+
+1 row in set (0.01 sec)
+
+mysql> CHAR_LENGTH('田中 太郎')
+    -> ^C
+mysql> CHAR_LENGTH('田中 太郎');
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'CHAR_LENGTH('田中 太郎')' at line 1
+mysql> SELECT CURRENT_TIMESTAMP;
++---------------------+
+| CURRENT_TIMESTAMP   |
++---------------------+
+| 2019-11-24 22:03:11 |
++---------------------+
+1 row in set (0.03 sec)
+
+mysql> DATE_FORMAT(CURRENT_TIMESTAMP, '%Y/%m/%d (%a)');
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'DATE_FORMAT(CURRENT_TIMESTAMP, '%Y/%m/%d (%a)')' at line 1
+mysql> select DATE_FORMAT(CURRENT_TIMESTAMP, '%Y/%m/%d (%a)');
++-------------------------------------------------+
+| DATE_FORMAT(CURRENT_TIMESTAMP, '%Y/%m/%d (%a)') |
++-------------------------------------------------+
+| 2019/11/24 (Sun)                                |
++-------------------------------------------------+
+1 row in set (0.03 sec)
+
+mysql> SELECT CURRENT_TIMESTAMP + INTERVAL 1 HOUR;
++-------------------------------------+
+| CURRENT_TIMESTAMP + INTERVAL 1 HOUR |
++-------------------------------------+
+| 2019-11-24 23:06:14                 |
++-------------------------------------+
+1 row in set (0.01 sec)
+
+mysql> SELECT *, arrival - departure FROM jugyou36;
++------------+------------+---------------------+
+| departure  | arrival    | arrival - departure |
++------------+------------+---------------------+
+| 2019-04-01 | 2019-04-07 |                   6 |
++------------+------------+---------------------+
+1 row in set (0.04 sec)
+
+mysql> SELECT * FROM jugyou37;
++------+
+| val  |
++------+
+|    1 |
+|    2 |
+|    3 |
+| NULL |
+|    5 |
++------+
+5 rows in set (0.04 sec)
+
+mysql> SELECT val,
+    -> CASE WHEN val IS NULL THEN 0
+    -> ELSE val
+    -> END
+    -> FROM jugyou37;
++------+-------------------------------------------+
+| val  | CASE WHEN val IS NULL THEN 0
+ELSE val
+END |
++------+-------------------------------------------+
+|    1 |                                         1 |
+|    2 |                                         2 |
+|    3 |                                         3 |
+| NULL |                                         0 |
+|    5 |                                         5 |
++------+-------------------------------------------+
+5 rows in set (0.02 sec)
+
+mysql> SELECT val, COALESCE(val, 0) FROM jugyou37;
++------+------------------+
+| val  | COALESCE(val, 0) |
++------+------------------+
+|    1 |                1 |
+|    2 |                2 |
+|    3 |                3 |
+| NULL |                0 |
+|    5 |                5 |
++------+------------------+
+5 rows in set (0.01 sec)
+
+mysql> SELECT val,
+    -> CASE val
+    -> WHEN 1 THEN '男性'
+    -> WHEN 2 THEN '女性'
+    -> ELSE '不明'
+    -> END
+    -> FROM jugyou37;
++------+----------------------------------------------------------------------+
+| val  | CASE val
+WHEN 1 THEN '男性'
+WHEN 2 THEN '女性'
+ELSE '不明'
+END       |
++------+----------------------------------------------------------------------+
+|    1 | 男性                                                                 |
+|    2 | 女性                                                                 |
+|    3 | 不明                                                                 |
+| NULL | 不明                                                                 |
+|    5 | 不明                                                                 |
++------+----------------------------------------------------------------------+
+5 rows in set (0.01 sec)
+
+mysql> 

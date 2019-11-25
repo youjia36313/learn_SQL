@@ -1,0 +1,141 @@
+#index
+◆データの追加: INSERT 命令
+➢列の指定、 NULL について
+◆データの削除: DELETE 命令
+➢行を指定した削除、物理削除と論理削除
+◆データの更新: UPDATE 命令
+➢条件付きの更新、SET 句の順序
+
+#詳細
+行の追加
+◆INSERT 命令の基本構成
+INSERT INTO テーブル名 [(列名, ...)] VALUES (入力値1, ...) ;
+➢列名は省略可(全ての列に入力する場合)
+INSERT INTO テーブル名 VALUES (入力値1, ...)
+➢入力値のデータ型は、列に合わせること!
+ 数値型なら 1 ,文字列型なら '1' など
+ 
+例1：
+SELECT * FROM jugyou41; #テーブルの中身を見てみよう
+DESC jugyou41; #列とデータ型を確認
+INSERT INTO jugyou41 VALUES (1, '氏名 ', '誕生日 '); #1行目の追加
+INSERT INTO jugyou41 (name, no) VALUES ('氏名2 ', 2); #2行目の追加
+SELECT FROM jugyou41; #結果を確認
+INSERT INTO jugyou41 VALUES(NULL,NULL,NULL);
+ERROR 1048 (23000): Column 'no' cannot be null #no 列は NULL が許されていない
+INSERT INTO jugyou41 VALUES(3,NULL,NULL);
+Query OK, 1 row affected (0.04 sec) #no 列は 3 、他の列は NULL として入力してみよう
+例2：
+INSERT INTO jugyou42 VALUES (1,10); #値を指定して行を入力してみよう
+SELECT * FROM jugyou42;  #結果を確認
+INSERT INTO jugyou42 VALUES (2, DEFAULT); #DEFAULT 値を明示的に指定しながら入力してみよう
+SELECT * FROM jugyou42;  #結果を確認
+INSERT INTO jugyou42 (no) VALUES(3); #行の挿入時に、対象の列を指定しなければ、DEFAULT 値が代わりに入力される
+SELECT * FROM jugyou42;  #結果を確認
+
+行の削除
+◆DELETE 命令の基本構造
+DELETE FROM テーブル名 [WHERE 条件式 ];
+注意：WHERE 句は省略可能。ただし、省略すると全ての行が削除されること!
+
+例1:全ての行を削除してみよう
+SELECT * FROM jugyou42;  #結果を確認
+DELETE FROM jugyou42;  #全ての行を削除
+SELECT * FROM jugyou42;  #結果を確認
+例2：WHERE 句で指定した行のみ削除してみよう
+SELECT * FROM jugyou41;
+DELETE FROM jugyou41 WHERE no=3;
+例3:ORDER BY 句 + LIMIT 句での行指定削除してみよう
+SELECT * FROM jugyou43;
+SELECT * FROM jugyou43 ORDER BY ts LIMIT 1; #一番古いタイムスタンプ(ts 列)の行を消してみよう
+DELETE FROM jugyou43 ORDER BY ts LIMIT 1;  # *を使わない
+SELECT * FROM jugyou43;
+
+データベースの削除
+◆物理削除は、データを本当に削除する考え方
+➢自然な発想、削除すればするほど、容量の削減にもなる、元に戻せない
+◆論理削除は、見せかけの削除
+➢本当には削除せず、あえて残しておく。削除しても容量は減らない、復元できる、アーカイブ化
+
+入力済みのデータの更新
+◆UPDATE 命令の基本構造
+UPDATE テーブル名 SET 列名1 = 値1, 列名2 = 値2, ... [WHERE 条件式];
+注意：WHERE 句は省略可能。ただし、省略すると全行が対象！
+例1:
+SELECT * FROM jugyou41; #jugyou41 の中を確認
+UPDATE jugyou41 SET birthday = CURRENT_DATE WHERE no = 2; #CURRENT_DATE 関数で今日の日付を取得する,no = 2の更新
+SELECT * FROM jugyou41; #結果を確認
+例2：
+SELECT * FROM jugyou41;#jugyou41 の中を確認
+UPDATE jugyou41 SET no = no + 1;  #“‘no の値’ +1” に更新する UPDATE 命令
+SELECT * FROM jugyou41; #結果を確認
+例3:
+UPDATE jugyou41 SET birthday = birthday - INTERVAL no DAY; #birthday 列を no 日分早めてみよう,日付の加減算は“INTERVAL”
+SELECT * FROM jugyou41;
+例4:複数列の更新は同時に行える(効率が良い)
+UPDATE jugyou41 SET no = 1;
+UPDATE jugyou41 SET birthday = '2019-01-01';
+UPDATE jugyou41 SET no = 1, birthday = '2019-01-01'; #複数列の更新はカンマ区切り
+SELECT * FROM jugyou41;
+例5:
+SELECT * FROM jugyou44;
++------+------+------+
+| no   | a    | b    |
++------+------+------+
+|    0 |   10 | NULL |
+|    1 |   10 | NULL |
+|    2 |   10 | NULL |
++------+------+------+
+3 rows in set (0.05 sec)
+
+UPDATE jugyou44 SET a=a+1,b=a WHERE no=1; #a を更新してから b を更新する場合( no = 1 )
+SELECT * FROM jugyou44;
++------+------+------+
+| no   | a    | b    |
++------+------+------+
+|    0 |   10 | NULL |
+|    1 |   11 |   11 |
+|    2 |   10 | NULL |
++------+------+------+
+
+UPDATE jugyou44 SET b = a, a = a + 1 WHERE no = 2; #b を更新してから a を更新する場合( no = 2 )
+SELECT * FROM jugyou44;
++------+------+------+
+| no   | a    | b    |
++------+------+------+
+|    0 |   10 | NULL |
+|    1 |   11 |   11 |
+|    2 |   11 |   10 |
++------+------+------+
+3 rows in set (0.01 sec)
+
+UPDATE jugyou44 SET b=NULL WHERE no>=1;
+SELECT * FROM jugyou44;
++------+------+------+
+| no   | a    | b    |
++------+------+------+
+|    0 |   10 | NULL |
+|    1 |   11 | NULL |
+|    2 |   11 | NULL |
++------+------+------+
+3 rows in set (0.01 sec)
+
+NULL の代入
+➢主に、値を初期化するために用いる
+➢俗に「NULL クリア」と呼ぶ
+➢NULL クリアされたこと
+
+◆mysql クライアントにて exit; と入力しエンター
+➢mysql > exit;
+➢セミコロン(;)を忘れずに
+
+
+
+
+
+
+
+
+
+
+

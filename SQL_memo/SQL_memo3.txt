@@ -1,0 +1,284 @@
+index
+◆検索結果のカスタマイズ
+➢ 並び替え, 行の制限, 数値計算, エイリアス
+◆関数
+➢ 剰余の計算(MOD関数), 丸めの計算(ROUND関数)
+◆文字列の扱い
+➢ 結合, 部分抽出
+CONCAT 関数, SUBSTRING 関数, TRIM 関数
+➢ 大きさの取得
+文字数, バイト数
+◆日付と時刻
+➢ 取得, 書式指定, 計算
+◆データ変換
+➢ CASE 式による条件指定
+
+
+検索結果の並び替え
+◆ORDER BY 句で、行のソートが可能
+ORDER BY 列名
+SELECT 列名 FROM テーブル名 WHERE 条件式 ORDER BY 列名;
+SELECT 列名 FROM テーブル名 ORDER BY 列名; #WHERE 句は省略可能
+◆ソートするメリット
+➢見やすさ
+➢いつでも順番が同じ
+◆デメリット
+➢場合によっては結果の表示に時間がかかる
+◆ORDER BY は、保存データの順番は変えない
+➢SELECT 命令の抽出結果を並び替えるだけ
+
+
+➢昇順と明示して並び替えてみよう，ORDER BY 句の最後に “ASC”
+◆降順(descending order)も可能
+➢「大きい→小さい」の順番
+➢“ASC” を “DESC” に置き換える
+例1:
+SELECT * FROM jugyou31 ORDER BY age;
+SELECT * FROM jugyou31 ORDER BY age ASC;
+SELECT * FROM jugyou31 ORDER BY age DESC;
+SELECT * FROM jugyou31 ORDER BY address;
++------+---------------+------+----------+-----------------+
+| no   | name          | age  | age_char | address         |
++------+---------------+------+----------+-----------------+
+|    2 | 佐藤 花子     |   30 | 30       | あいち          |
+|    5 | 大石 佐介     |   10 | 10       | かがわ          |
+|    4 | 鹿島 道久     |   15 | 15       | かごしま        |
+|    3 | 石井 二郎     |    3 | 3        | かながわ        |
+|    1 | 田中 太郎     |    1 | 1        | とうきょう      |
++------+---------------+------+----------+-----------------+
+5 rows in set (0.01 sec)
+ SELECT * FROM jugyou31 ORDER BY name;
++------+---------------+------+----------+-----------------+
+| no   | name          | age  | age_char | address         |
++------+---------------+------+----------+-----------------+
+|    2 | 佐藤 花子     |   30 | 30       | あいち          |
+|    5 | 大石 佐介     |   10 | 10       | かがわ          |
+|    1 | 田中 太郎     |    1 | 1        | とうきょう      |
+|    3 | 石井 二郎     |    3 | 3        | かながわ        |
+|    4 | 鹿島 道久     |   15 | 15       | かごしま        |
++------+---------------+------+----------+-----------------+
+5 rows in set (0.01 sec)
+
+➢“age” は数値型、 “age_char” は文字列型の列
+SELECT * FROM jugyou31 ORDER BY age;
+SELECT * FROM jugyou31 ORDER BY age_char;
+◆複数の列に注目した ORDER BY 句
+ORDER BY 列1, 列2, 列3, ...
+◆ソート方法の指定(昇順, 降順)
+ORDER BY 列1 [ASC|DESC], 列2 [ASC|DESC] ...
+例1:
+SELECT * FROM jugyou32 ORDER BY team, score;
+SELECT * FROM jugyou32 ORDER BY team ASC, score DESC;
+
+◆LIMIT 句で取得行を制限
+LIMIT 行数 [OFFSET 省略する行数 ]
+LIMIT 5 OFFSET 1
+➢WHERE 句はテーブルの値で制限する
+➢LIMIT 句は表示する行数で制限する
+WHERE 句 → ORDER BY 句 → LIMIT 句の順で評価される
+例1:
+SELECT * FROM jugyou33 LIMIT 5 OFFSET 1;
+SELECT * FROM jugyou33 WHERE no >= 5 LIMIT 3;
+SELECT * FROM jugyou33 WHERE no <= 5 ORDER BY no DESC LIMIT 3;
+注意: LIMIT 句は標準SQLではない，MySQL, PostgreSQL
+
+数値計算
+◆SQL 命令では算術演算ができる
+SELECT 10 * (3 + 1);
+SELECT 10 / 0;
+SELECT NULL + 1;
+SELECT *, price * stock FROM jugyou34;
+SELECT 10 % 3; SELECT MOD(10,3);
+ROUND(四捨五入したい数または列名 [, 四捨五入する位置 ])
+SELECT ROUND(100.5);
+SELECT price, ROUND(price) FROM jugyou35;
+SELECT price, ROUND(price, 1) FROM jugyou35;
+SELECT price, ROUND(price, 2) FROM jugyou35;
+SELECT price, ROUND(price, -1) FROM jugyou35;
++--------+------------------+
+| price  | ROUND(price, -1) |
++--------+------------------+
+| 120.50 |              120 |
+|  98.00 |              100 |
+| 130.49 |              130 |
++--------+------------------+
+3 rows in set (0.02 sec)
+
+列に別名(エイリアス)をつける
+➢SELECT 句にて、予約語 “AS” を使う，SELECT 元の列名 AS 別名
+例1:
+SELECT *, price * stock AS amount FROM jugyou34;
+SELECT name AS hoge FROM jugyou34;
+SELECT name hoge FROM jugyou34; #ASは省略可能
+SELECT name AS `ほげ` FROM jugyou34; #バッククオート，
+例2:
+SELECT *, price * stock AS amount FROM jugyou34 WHERE amount < 500;#➢WHERE 句 → SELECT 句 の順番で評価される
+ERROR 1054 (42S22): Unknown column 'amount' in 'where clause'
+SELECT *, price * stock AS amount FROM jugyou34 WHERE price * stock < 500;
++-----------+-------+-------+------+--------+
+| name      | price | stock | unit | amount |
++-----------+-------+-------+------+--------+
+| いちご    |   130 |     2 | 箱   |    260 |
++-----------+-------+-------+------+--------+
+1 row in set (0.01 sec)
+
+文字列の取り扱い
+◆RDBMS によって方言がある
+➢MySQL では CONCAT 関数
+CONCAT('文字列1 ', '文字列2 ' [, ...])
+➢SQL Server では + 演算子
+'文字列1 ' + '文字列2 ' [ + ...]
+➢Oracle, Db2, PostgreSQL では || 演算子
+'文字列1 ' || '文字列2 ' [ || ...]
+例1:
+SELECT CONCAT('りんご', '飴');
+SELECT stock, unit, CONCAT(stock, unit) from jugyou34;
+◆文字列から一部を取り出したい場合、SUBSTRING 関数が使える
+➢文法，SUBSTRING(文字列または列名, 開始位置, 抽出文字数)
+例1:
+SELECT SUBSTRING('20190401', 5, 2);
++-----------------------------+
+| SUBSTRING('20190401', 5, 2) |
++-----------------------------+
+| 04                          |
++-----------------------------+
+1 row in set (0.01 sec)
+
+◆TRIM 関数
+➢文字列両端の空白を削除する関数
+➢使い方
+◆TRIM 関数の仲間
+➢先頭の空白文字だけ削除 → LTRIM 関数
+➢末尾の空白文字だけ削除 → RTRIM 関数
+➢文法は TRIM 関数と同じ
+
+◆CHARACTER_LENGTH 関数
+例: CHAR_LENGTH('田中 太郎') → 5
+◆OCTET_LENGTH 関数
+➢ 「何バイトの文字列か」を教えてくれる、バイト, Byte: データ量の単位(二進数で8桁分)
+注意: 「1文字が何バイト消費するか」は文字コード次第、UTF8: 半角文字は1バイト, 全角文字は3バイト消費
+例: OCTET_LENGTH('田中 太郎') → 13 (UTF8 の場合)
+
+日付の取り扱い
+SELECT CURRENT_TIMESTAMP;
+◆日付だけ、時刻だけの取得
+➢日付だけなら CURRENT_DATE 関数
+➢時刻だけなら CURRENT_TIME 関数
+◆DATE_FORMAT 関数 (MySQLの場合)
+DATE_FORMAT(日付の文字列 , '書式 ')
+➢例: 「年/月/日 (曜日)」→ ' %Y/%m/%d (%a) '
+DATE_FORMAT(CURRENT_TIMESTAMP, '%Y/%m/%d (%a)');
+
+mysql> select DATE_FORMAT(CURRENT_TIMESTAMP, '%Y/%m/%d (%a)');
++-------------------------------------------------+
+| DATE_FORMAT(CURRENT_TIMESTAMP, '%Y/%m/%d (%a)') |
++-------------------------------------------------+
+| 2019/11/24 (Sun)                                |
++-------------------------------------------------+
+1 row in set (0.03 sec)
+
+◆INTERVAL 型: 特定の長さの時間を表現
+➢1時間(“1 HOUR”), 2日(“2 DAY”), ...
+◆足し算
+➢1時間後の日付と時刻を取得してみよう
+◆引き算
+➢2つの日付の差を見てみよう
+
+SELECT CURRENT_TIMESTAMP + INTERVAL 1 HOUR;
+mysql> SELECT CURRENT_TIMESTAMP + INTERVAL 1 HOUR;
++-------------------------------------+
+| CURRENT_TIMESTAMP + INTERVAL 1 HOUR |
++-------------------------------------+
+| 2019-11-24 23:06:14                 |
++-------------------------------------+
+1 row in set (0.01 sec)
+
+SELECT *, arrival - departure FROM jugyou36;
+mysql> SELECT *, arrival - departure FROM jugyou36;
++------------+------------+---------------------+
+| departure  | arrival    | arrival - departure |
++------------+------------+---------------------+
+| 2019-04-01 | 2019-04-07 |                   6 |
++------------+------------+---------------------+
+1 row in set (0.04 sec)
+
+
+◆データ変換
+
+◆単純な変換なら CASE 式で実現できる
+➢「◯◯な場合には××に変換」を羅列して命令
+CASE WHEN 条件式1 THEN 変換後の値1
+[WHEN 条件式2 THEN 変換後の値2 ... ]
+[ELSE 値E ]
+END
+
+mysql> SELECT * FROM jugyou37;
++------+
+| val  |
++------+
+|    1 |
+|    2 |
+|    3 |
+| NULL |
+|    5 |
++------+
+5 rows in set (0.04 sec)
+
+mysql> SELECT val,
+    -> CASE WHEN val IS NULL THEN 0
+    -> ELSE val
+    -> END
+    -> FROM jugyou37;
++------+-------------------------------------------+
+| val  | CASE WHEN val IS NULL THEN 0
+ELSE val
+END |
++------+-------------------------------------------+
+|    1 |                                         1 |
+|    2 |                                         2 |
+|    3 |                                         3 |
+| NULL |                                         0 |
+|    5 |                                         5 |
++------+-------------------------------------------+
+5 rows in set (0.02 sec)
+
+◆COALESCE 関数
+➢使い方
+
+◆参考: COALESCE 関数の主な使い道
+全て NULL なら引数 “全てNULLのときの値” を返す
+COALESCE(列名 , NULL から置き換える値 )
+COALESCE(列1 [ , 列2 , ... ] , 全てNULLのときの値 )
+
+SELECT val, COALESCE(val, 0) FROM jugyou37;
++------+------------------+
+| val  | COALESCE(val, 0) |
++------+------------------+
+|    1 |                1 |
+|    2 |                2 |
+|    3 |                3 |
+| NULL |                0 |
+|    5 |                5 |
++------+------------------+
+5 rows in set (0.01 sec)
+
+SELECT val,
+CASE val
+WHEN 1 THEN '男性'
+WHEN 2 THEN '女性'
+ELSE '不明'
+END
+FROM jugyou37;
++------+----------------------------------------------------------------------+
+| val  | CASE val
+WHEN 1 THEN '男性'
+WHEN 2 THEN '女性'
+ELSE '不明'
+END       |
++------+----------------------------------------------------------------------+
+|    1 | 男性                                                                 |
+|    2 | 女性                                                                 |
+|    3 | 不明                                                                 |
+| NULL | 不明                                                                 |
+|    5 | 不明                                                                 |
++------+-----------------

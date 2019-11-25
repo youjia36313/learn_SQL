@@ -1,0 +1,275 @@
+Last login: Sun Nov 24 03:21:01 on ttys000
+(base) youjiadeMacBook-Air:~ youjia$ mysql -u root -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 30
+Server version: 8.0.18 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2019, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> SELECT * FROM jugyou21;
+ERROR 1046 (3D000): No database selected
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| jugyou             |
+| mydb               |
+| mysql              |
+| performance_schema |
+| sys                |
+| test               |
++--------------------+
+7 rows in set (0.49 sec)
+
+mysql> use jugyou;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> SELECT * FROM jugyou21;
++------+------------------+------------+--------------------+
+| no   | name             | birthday   | address            |
++------+------------------+------------+--------------------+
+|    1 | 早稲田 太郎      | 1882-10-21 | 東京都新宿区       |
+|    2 | 所沢 花子        | NULL       | 埼玉県所沢市       |
+|    3 | 大隈 重信        | NULL       | 佐賀県佐賀市       |
++------+------------------+------------+--------------------+
+3 rows in set (0.01 sec)
+
+mysql> DESC jugyou21;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| no       | int(11)     | YES  |     | NULL    |       |
+| name     | varchar(20) | YES  |     | NULL    |       |
+| birthday | date        | YES  |     | NULL    |       |
+| address  | varchar(40) | YES  |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+4 rows in set (0.23 sec)
+
+mysql> SELECT no, name FROM jugyou21;
++------+------------------+
+| no   | name             |
++------+------------------+
+|    1 | 早稲田 太郎      |
+|    2 | 所沢 花子        |
+|    3 | 大隈 重信        |
++------+------------------+
+3 rows in set (0.06 sec)
+
+mysql> SELECT birthday, no, address, name FROM jugyou21;
++------------+------+--------------------+------------------+
+| birthday   | no   | address            | name             |
++------------+------+--------------------+------------------+
+| 1882-10-21 |    1 | 東京都新宿区       | 早稲田 太郎      |
+| NULL       |    2 | 埼玉県所沢市       | 所沢 花子        |
+| NULL       |    3 | 佐賀県佐賀市       | 大隈 重信        |
++------------+------+--------------------+------------------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT no, no, address, no FROM jugyou21;
++------+------+--------------------+------+
+| no   | no   | address            | no   |
++------+------+--------------------+------+
+|    1 |    1 | 東京都新宿区       |    1 |
+|    2 |    2 | 埼玉県所沢市       |    2 |
+|    3 |    3 | 佐賀県佐賀市       |    3 |
++------+------+--------------------+------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT * FROM jugyou21 WHERE no = 2;
++------+---------------+----------+--------------------+
+| no   | name          | birthday | address            |
++------+---------------+----------+--------------------+
+|    2 | 所沢 花子     | NULL     | 埼玉県所沢市       |
++------+---------------+----------+--------------------+
+1 row in set (0.08 sec)
+
+mysql> SELECT no, name FROM jugyou21 WHERE no = 2;
++------+---------------+
+| no   | name          |
++------+---------------+
+|    2 | 所沢 花子     |
++------+---------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT * FROM jugyou21 WHERE no <> 2;
++------+------------------+------------+--------------------+
+| no   | name             | birthday   | address            |
++------+------------------+------------+--------------------+
+|    1 | 早稲田 太郎      | 1882-10-21 | 東京都新宿区       |
+|    3 | 大隈 重信        | NULL       | 佐賀県佐賀市       |
++------+------------------+------------+--------------------+
+2 rows in set (0.10 sec)
+
+mysql> SELECT * FROM jugyou21 WHERE no = 10;
+Empty set (0.01 sec)
+
+mysql> 
+mysql> SELECT * WHERE no = 2 FROM
+    -> ^C
+mysql> SELECT * WHERE no = 2 FROM jugyou21;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'FROM jugyou21' at line 1
+mysql> SELECT * FROM jugyou21 WHERE name = '早稲田 太郎';
++------+------------------+------------+--------------------+
+| no   | name             | birthday   | address            |
++------+------------------+------------+--------------------+
+|    1 | 早稲田 太郎      | 1882-10-21 | 東京都新宿区       |
++------+------------------+------------+--------------------+
+1 row in set (0.02 sec)
+
+mysql> SELECT * FROM jugyou21 WHERE birthday = '1882-10-21';
++------+------------------+------------+--------------------+
+| no   | name             | birthday   | address            |
++------+------------------+------------+--------------------+
+|    1 | 早稲田 太郎      | 1882-10-21 | 東京都新宿区       |
++------+------------------+------------+--------------------+
+1 row in set (0.02 sec)
+
+mysql> SELECT * FROM jugyou21 WHERE birthday = NULL;
+Empty set (0.02 sec)
+
+mysql> SELECT * FROM jugyou21 WHERE birthday <> NULL;
+Empty set (0.00 sec)
+
+mysql> SELECT * FROM jugyou21 WHERE birthday IS NULL;
++------+---------------+----------+--------------------+
+| no   | name          | birthday | address            |
++------+---------------+----------+--------------------+
+|    2 | 所沢 花子     | NULL     | 埼玉県所沢市       |
+|    3 | 大隈 重信     | NULL     | 佐賀県佐賀市       |
++------+---------------+----------+--------------------+
+2 rows in set (0.01 sec)
+
+mysql> SELECT * FROM jugyou21 WHERE birthday IS NOT NULL;
++------+------------------+------------+--------------------+
+| no   | name             | birthday   | address            |
++------+------------------+------------+--------------------+
+|    1 | 早稲田 太郎      | 1882-10-21 | 東京都新宿区       |
++------+------------------+------------+--------------------+
+1 row in set (0.01 sec)
+
+mysql> SELECT * FROM jugyou22;
++------+------+------+------+
+| no   | a    | b    | c    |
++------+------+------+------+
+|    1 |    1 |    2 |    2 |
+|    2 |    2 |    1 |    2 |
+|    3 |    3 |    3 |    0 |
+|    4 |    0 |    0 |    1 |
++------+------+------+------+
+4 rows in set (0.05 sec)
+
+mysql> DESC jugyou22;
++-------+--------+------+-----+---------+-------+
+| Field | Type   | Null | Key | Default | Extra |
++-------+--------+------+-----+---------+-------+
+| no    | int(2) | YES  |     | NULL    |       |
+| a     | int(2) | YES  |     | NULL    |       |
+| b     | int(2) | YES  |     | NULL    |       |
+| c     | int(2) | YES  |     | NULL    |       |
++-------+--------+------+-----+---------+-------+
+4 rows in set (0.24 sec)
+
+mysql> SELECT * FROM jugyou22 WHERE a = 0 AND b = 0;
++------+------+------+------+
+| no   | a    | b    | c    |
++------+------+------+------+
+|    4 |    0 |    0 |    1 |
++------+------+------+------+
+1 row in set (0.00 sec)
+
+mysql> SELECT * FROM jugyou22 WHERE a < 2 OR b < 2;
++------+------+------+------+
+| no   | a    | b    | c    |
++------+------+------+------+
+|    1 |    1 |    2 |    2 |
+|    2 |    2 |    1 |    2 |
+|    4 |    0 |    0 |    1 |
++------+------+------+------+
+3 rows in set (0.01 sec)
+
+mysql> SELECT * FROM jugyou22 WHERE ( a = 2 OR a = 3 ) AND ( b = 2 OR b = 3) ;
++------+------+------+------+
+| no   | a    | b    | c    |
++------+------+------+------+
+|    3 |    3 |    3 |    0 |
++------+------+------+------+
+1 row in set (0.03 sec)
+
+mysql> SELECT * FROM jugyou22 WHERE a = 2 OR a = 3 AND b = 2 OR b = 3;
++------+------+------+------+
+| no   | a    | b    | c    |
++------+------+------+------+
+|    2 |    2 |    1 |    2 |
+|    3 |    3 |    3 |    0 |
++------+------+------+------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT * FROM jugyou22 WHERE a < 2 OR b < 2;
++------+------+------+------+
+| no   | a    | b    | c    |
++------+------+------+------+
+|    1 |    1 |    2 |    2 |
+|    2 |    2 |    1 |    2 |
+|    4 |    0 |    0 |    1 |
++------+------+------+------+
+3 rows in set (0.03 sec)
+
+mysql> SELECT * FROM jugyou22 WHERE NOT ( a < 2 OR b < 2 ) ;
++------+------+------+------+
+| no   | a    | b    | c    |
++------+------+------+------+
+|    3 |    3 |    3 |    0 |
++------+------+------+------+
+1 row in set (0.01 sec)
+
+mysql> SELECT * FROM jugyou21 WHERE birthday LIKE '18__-__-__';
++------+------------------+------------+--------------------+
+| no   | name             | birthday   | address            |
++------+------------------+------------+--------------------+
+|    1 | 早稲田 太郎      | 1882-10-21 | 東京都新宿区       |
++------+------------------+------------+--------------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT * FROM jugyou21 WHERE birthday LIKE '18%';
++------+------------------+------------+--------------------+
+| no   | name             | birthday   | address            |
++------+------------------+------------+--------------------+
+|    1 | 早稲田 太郎      | 1882-10-21 | 東京都新宿区       |
++------+------------------+------------+--------------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT * FROM jugyou21 WHERE address LIKE ‘%県%';
+    '> ^C
+mysql> SELECT * FROM jugyou21 WHERE address LIKE ‘%県%';
+    '> ^C
+mysql> SELECT * FROM jugyou21 WHERE address LIKE '%県%';
++------+---------------+----------+--------------------+
+| no   | name          | birthday | address            |
++------+---------------+----------+--------------------+
+|    2 | 所沢 花子     | NULL     | 埼玉県所沢市       |
+|    3 | 大隈 重信     | NULL     | 佐賀県佐賀市       |
++------+---------------+----------+--------------------+
+2 rows in set (0.01 sec)
+
+mysql> SELECT * FROM jugyou23 WHERE string LIKE '%¥%%';
+Empty set (0.03 sec)
+
+mysql> SELECT * FROM jugyou23 WHERE string LIKE '%It''s%';
++------+---------------------+
+| no   | string              |
++------+---------------------+
+|    3 | It's a small world. |
++------+---------------------+
+1 row in set (0.00 sec)
+
+mysql> 

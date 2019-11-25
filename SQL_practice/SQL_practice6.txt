@@ -1,0 +1,562 @@
+Last login: Sun Nov 24 21:15:08 on ttys000
+(base) youjiadeair:~ youjia$ mysql -u root -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 32
+Server version: 8.0.18 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2019, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| jugyou             |
+| mydb               |
+| mysql              |
+| performance_schema |
+| sys                |
+| test               |
++--------------------+
+7 rows in set (0.28 sec)
+
+mysql> use jugyou;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> show tables;
++------------------+
+| Tables_in_jugyou |
++------------------+
+| bp_aed           |
+| bp_h25           |
+| bp_h26           |
+| bp_h27           |
+| bp_h28           |
+| bp_poi           |
+| disney           |
+| j53ref           |
+| jugyou21         |
+| jugyou22         |
+| jugyou23         |
+| jugyou31         |
+| jugyou32         |
+| jugyou33         |
+| jugyou34         |
+| jugyou35         |
+| jugyou36         |
+| jugyou37         |
+| jugyou41         |
+| jugyou42         |
+| jugyou43         |
+| jugyou44         |
+| jugyou51         |
+| jugyou52         |
+| jugyou53         |
+| jugyou64         |
+| jugyou71a        |
+| jugyou71b        |
+| jugyou72s        |
+| jugyou72z        |
+| jugyou73m        |
+| jugyou73s        |
+| jugyou74s        |
+| pi200            |
++------------------+
+34 rows in set (0.01 sec)
+
+mysql> create table jugyou61(
+    -> no int(3) not null,
+    -> v varchar(5),
+    -> d date
+    -> );
+Query OK, 0 rows affected, 1 warning (0.83 sec)
+
+mysql> DESC jugyou61;
++-------+------------+------+-----+---------+-------+
+| Field | Type       | Null | Key | Default | Extra |
++-------+------------+------+-----+---------+-------+
+| no    | int(3)     | NO   |     | NULL    |       |
+| v     | varchar(5) | YES  |     | NULL    |       |
+| d     | date       | YES  |     | NULL    |       |
++-------+------------+------+-----+---------+-------+
+3 rows in set (0.13 sec)
+
+mysql> CREATE TABLE `jugyou61` (
+    -> `no` int(3) NOT NULL,
+    -> `v` varchar(5),
+    -> `d` date
+    -> );^C
+mysql> CREATE TABLE `jugyou61` (
+    -> `no` int(3) not null,
+    -> `v` varchar(5),
+    -> `d` date;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 4
+mysql> CREATE TABLE `jugyou61` ( `no` int(3) not null, `v` varchar(5), `d` date);
+ERROR 1050 (42S01): Table 'jugyou61' already exists
+mysql> CREATE TABLE `jugyou61_1` ( `no` int(3) not null, `v` varchar(5), `d` date);
+Query OK, 0 rows affected, 1 warning (0.15 sec)
+
+mysql> INSERT INTO `jugyou61` VALUES (1, 'hoge', CURRENT_DATE);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> select  * from jugyou61;
++----+------+------------+
+| no | v    | d          |
++----+------+------------+
+|  1 | hoge | 2019-11-25 |
++----+------+------------+
+1 row in set (0.03 sec)
+
+mysql> create table jugyou62a select * from jugyou61;
+Query OK, 1 row affected (0.50 sec)
+Records: 1  Duplicates: 0  Warnings: 0
+
+mysql> desc jugyou62a;
++-------+------------+------+-----+---------+-------+
+| Field | Type       | Null | Key | Default | Extra |
++-------+------------+------+-----+---------+-------+
+| no    | int(3)     | NO   |     | NULL    |       |
+| v     | varchar(5) | YES  |     | NULL    |       |
+| d     | date       | YES  |     | NULL    |       |
++-------+------------+------+-----+---------+-------+
+3 rows in set (0.10 sec)
+
+mysql> desc jugyou61;
++-------+------------+------+-----+---------+-------+
+| Field | Type       | Null | Key | Default | Extra |
++-------+------------+------+-----+---------+-------+
+| no    | int(3)     | NO   |     | NULL    |       |
+| v     | varchar(5) | YES  |     | NULL    |       |
+| d     | date       | YES  |     | NULL    |       |
++-------+------------+------+-----+---------+-------+
+3 rows in set (0.02 sec)
+
+mysql> select * from jugyou61;
++----+------+------------+
+| no | v    | d          |
++----+------+------------+
+|  1 | hoge | 2019-11-25 |
++----+------+------------+
+1 row in set (0.01 sec)
+
+mysql> select * from jugyou62a;
++----+------+------------+
+| no | v    | d          |
++----+------+------------+
+|  1 | hoge | 2019-11-25 |
++----+------+------------+
+1 row in set (0.01 sec)
+
+mysql> create table jugyou62b like jugyou61;
+Query OK, 0 rows affected (0.16 sec)
+
+mysql> select * from jugyou62b;
+Empty set (0.04 sec)
+
+mysql> desc jugyou62b;
++-------+------------+------+-----+---------+-------+
+| Field | Type       | Null | Key | Default | Extra |
++-------+------------+------+-----+---------+-------+
+| no    | int(3)     | NO   |     | NULL    |       |
+| v     | varchar(5) | YES  |     | NULL    |       |
+| d     | date       | YES  |     | NULL    |       |
++-------+------------+------+-----+---------+-------+
+3 rows in set (0.02 sec)
+
+mysql> show tables;
++------------------+
+| Tables_in_jugyou |
++------------------+
+| bp_aed           |
+| bp_h25           |
+| bp_h26           |
+| bp_h27           |
+| bp_h28           |
+| bp_poi           |
+| disney           |
+| j53ref           |
+| jugyou21         |
+| jugyou22         |
+| jugyou23         |
+| jugyou31         |
+| jugyou32         |
+| jugyou33         |
+| jugyou34         |
+| jugyou35         |
+| jugyou36         |
+| jugyou37         |
+| jugyou41         |
+| jugyou42         |
+| jugyou43         |
+| jugyou44         |
+| jugyou51         |
+| jugyou52         |
+| jugyou53         |
+| jugyou61         |
+| jugyou61_1       |
+| jugyou62a        |
+| jugyou62b        |
+| jugyou64         |
+| jugyou71a        |
+| jugyou71b        |
+| jugyou72s        |
+| jugyou72z        |
+| jugyou73m        |
+| jugyou73s        |
+| jugyou74s        |
+| pi200            |
++------------------+
+38 rows in set (0.26 sec)
+
+mysql> create jugyou62p like jugyou61;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'jugyou62p like jugyou61' at line 1
+mysql> create table jugyou62p like jugyou61;
+Query OK, 0 rows affected (0.20 sec)
+
+mysql> drop table jugyou62p;
+Query OK, 0 rows affected (0.14 sec)
+
+mysql> select * from jugyou62a;
++----+------+------------+
+| no | v    | d          |
++----+------+------------+
+|  1 | hoge | 2019-11-25 |
++----+------+------------+
+1 row in set (0.01 sec)
+
+mysql> delete from jugyou62a;
+Query OK, 1 row affected (0.04 sec)
+
+mysql> select * from jugyou62a;
+Empty set (0.00 sec)
+
+mysql> insert into jugyou62a values(
+    -> 1,'hoge',current_date);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> select * from jugyou62a;
++----+------+------------+
+| no | v    | d          |
++----+------+------------+
+|  1 | hoge | 2019-11-25 |
++----+------+------------+
+1 row in set (0.00 sec)
+
+mysql> truncate table jugyou62a;
+Query OK, 0 rows affected (0.17 sec)
+
+mysql> select * from jugyou62a;
+Empty set (0.01 sec)
+
+mysql> ALTER TABLE jugyou62a ADD name var(10) FIRST;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'var(10) FIRST' at line 1
+mysql> ALTER TABLE jugyou62a ADD name varchar(10) FIRST;
+Query OK, 0 rows affected (0.57 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> DESC jugyou62a;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| name  | varchar(10) | YES  |     | NULL    |       |
+| no    | int(3)      | NO   |     | NULL    |       |
+| v     | varchar(5)  | YES  |     | NULL    |       |
+| d     | date        | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+4 rows in set (0.12 sec)
+
+mysql> ALTER TABLE jugyou62a MODIFY name varchar(10) DEFAULT 'hoge';
+Query OK, 0 rows affected (0.07 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> DESC jugyou62a;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| name  | varchar(10) | YES  |     | hoge    |       |
+| no    | int(3)      | NO   |     | NULL    |       |
+| v     | varchar(5)  | YES  |     | NULL    |       |
+| d     | date        | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+4 rows in set (0.02 sec)
+
+mysql> ALTER TABLE jugyou62a RENAME COLUMN name TO nickname;
+Query OK, 0 rows affected (0.28 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc jugyou62a;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| nickname | varchar(10) | YES  |     | hoge    |       |
+| no       | int(3)      | NO   |     | NULL    |       |
+| v        | varchar(5)  | YES  |     | NULL    |       |
+| d        | date        | YES  |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+4 rows in set (0.14 sec)
+
+mysql> ALTER TABLE jugyou62a RENAME jugyou62a TO jugyou62;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'TO jugyou62' at line 1
+mysql> ALTER TABLE RENAME jugyou62a TO jugyou62;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'RENAME jugyou62a TO jugyou62' at line 1
+mysql> ALTER TABLE jugyou62a RENAME TO jugyou62;
+Query OK, 0 rows affected (0.27 sec)
+
+mysql> SHOW TABLES;
++------------------+
+| Tables_in_jugyou |
++------------------+
+| bp_aed           |
+| bp_h25           |
+| bp_h26           |
+| bp_h27           |
+| bp_h28           |
+| bp_poi           |
+| disney           |
+| j53ref           |
+| jugyou21         |
+| jugyou22         |
+| jugyou23         |
+| jugyou31         |
+| jugyou32         |
+| jugyou33         |
+| jugyou34         |
+| jugyou35         |
+| jugyou36         |
+| jugyou37         |
+| jugyou41         |
+| jugyou42         |
+| jugyou43         |
+| jugyou44         |
+| jugyou51         |
+| jugyou52         |
+| jugyou53         |
+| jugyou61         |
+| jugyou61_1       |
+| jugyou62         |
+| jugyou62b        |
+| jugyou64         |
+| jugyou71a        |
+| jugyou71b        |
+| jugyou72s        |
+| jugyou72z        |
+| jugyou73m        |
+| jugyou73s        |
+| jugyou74s        |
+| pi200            |
++------------------+
+38 rows in set (0.20 sec)
+
+mysql> ALTER TABLE jugyou62 CHANGE nickname id int(5);
+Query OK, 0 rows affected, 1 warning (0.51 sec)
+Records: 0  Duplicates: 0  Warnings: 1
+
+mysql> SELECT * FROM jugyou62;
+Empty set (0.01 sec)
+
+mysql> DESC jugyou62;
++-------+------------+------+-----+---------+-------+
+| Field | Type       | Null | Key | Default | Extra |
++-------+------------+------+-----+---------+-------+
+| id    | int(5)     | YES  |     | NULL    |       |
+| no    | int(3)     | NO   |     | NULL    |       |
+| v     | varchar(5) | YES  |     | NULL    |       |
+| d     | date       | YES  |     | NULL    |       |
++-------+------------+------+-----+---------+-------+
+4 rows in set (0.05 sec)
+
+mysql> ALTER TABLE jugyou62a CHANGE nickname id int(5);
+ERROR 1146 (42S02): Table 'jugyou.jugyou62a' doesn't exist
+mysql> ALTER TABLE jugyou62 DROP id;
+Query OK, 0 rows affected (0.41 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc jugyou62;
++-------+------------+------+-----+---------+-------+
+| Field | Type       | Null | Key | Default | Extra |
++-------+------------+------+-----+---------+-------+
+| no    | int(3)     | NO   |     | NULL    |       |
+| v     | varchar(5) | YES  |     | NULL    |       |
+| d     | date       | YES  |     | NULL    |       |
++-------+------------+------+-----+---------+-------+
+3 rows in set (0.15 sec)
+
+mysql> CREATE TABLE jugyou8(
+    -> no int(3) NOT NULL);
+Query OK, 0 rows affected, 1 warning (0.38 sec)
+
+mysql> DESC jugyou8;
++-------+--------+------+-----+---------+-------+
+| Field | Type   | Null | Key | Default | Extra |
++-------+--------+------+-----+---------+-------+
+| no    | int(3) | NO   |     | NULL    |       |
++-------+--------+------+-----+---------+-------+
+1 row in set (0.14 sec)
+
+mysql> SELECT * FROM jugyou63;
+ERROR 1146 (42S02): Table 'jugyou.jugyou63' doesn't exist
+mysql> CREATE TABLE jugou63(`arrival`date,`room`varchar(3)
+    -> ^C
+mysql> CREATE TABLE jugou63(
+    -> `arrival`date,
+    -> `room`varchar(3),
+    -> `name`varchar(10),
+    -> CONSTRAINT pkey PRIMARY KEY (arrival,room)
+    -> );
+Query OK, 0 rows affected (0.47 sec)
+
+mysql> INSERT INTO jugyou63 VALUES()
+    -> ^C
+mysql> INSERT INTO jugyou63(
+    -> ^C
+mysql> INSERT INTO jugyou63 VALUES(
+    -> CURRENT_DATE,'101','hoge'
+    -> );
+ERROR 1146 (42S02): Table 'jugyou.jugyou63' doesn't exist
+mysql> INSERT INTO jugyou63 VALUES(CURRENT_DATE,'101','hoge');
+ERROR 1146 (42S02): Table 'jugyou.jugyou63' doesn't exist
+mysql> INSERT INTO jugyou63 VALUES (CURRENT_DATE, '101', 'hoge');
+ERROR 1146 (42S02): Table 'jugyou.jugyou63' doesn't exist
+mysql> ALTER TABLE jugou63 RENAME TO jugyou63;
+Query OK, 0 rows affected (0.29 sec)
+
+mysql> INSERT INTO jugyou63 VALUES (CURRENT_DATE, '101', 'hoge');
+Query OK, 1 row affected (0.05 sec)
+
+mysql> INSER INTO jugyou63 VALUES(
+    -> CURRENT_DATE,'101','foo'
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'INSER INTO jugyou63 VALUES(
+CURRENT_DATE,'101','foo'
+)' at line 1
+mysql> INSERT INTO jugyou63 VALUES( CURRENT_DATE,'101','foo' );
+ERROR 1062 (23000): Duplicate entry '2019-11-25-101' for key 'PRIMARY'
+mysql> INSERT INTO jugyou63 VALUES( CURRENT_DATE,'102','foo' );
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO jugyou63 VALUES( CURRENT_DATE,'102','foo' );
+ERROR 1062 (23000): Duplicate entry '2019-11-25-102' for key 'PRIMARY'
+mysql> INSERT INTO jugyou63 VALUES( '2019-04-01','102','bar' );
+Query OK, 1 row affected (0.01 sec)
+
+mysql> ALTER TABLE jugyou63 ADD CONSTRAINT uni UNIQUE (name);
+Query OK, 0 rows affected (0.34 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> DESC jugyou63;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| arrival | date        | NO   | PRI | NULL    |       |
+| room    | varchar(3)  | NO   | PRI | NULL    |       |
+| name    | varchar(10) | YES  | UNI | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+3 rows in set (0.21 sec)
+
+mysql> ALTER TABLE jugyou63 DROP INDEX uni;
+Query OK, 0 rows affected (0.09 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> ALTER TABLE jugyou63 DROP PRIMARY KEY;
+Query OK, 3 rows affected (0.21 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> DESC jugyou63;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| arrival | date        | NO   |     | NULL    |       |
+| room    | varchar(3)  | NO   |     | NULL    |       |
+| name    | varchar(10) | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+
+mysql> SELECT * FROM jugyou64;
++------+------------+
+| id   | v          |
++------+------------+
+|    1 | Apple      |
+|    2 | Orange     |
+|    3 | Strawberry |
++------+------------+
+3 rows in set (0.12 sec)
+
+mysql> DESC jugyou64;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| id    | int(3)      | YES  |     | NULL    |       |
+| v     | varchar(10) | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+2 rows in set (0.33 sec)
+
+mysql> SHOW INDEX FROM jugyou64;
+Empty set (0.32 sec)
+
+mysql> CREATE INDEX i64 ON jugyou64(id);
+Query OK, 0 rows affected (0.59 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> SHOW INDEX FROM jugyou64;
++----------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+------------+
+| Table    | Non_unique | Key_name | Seq_in_index | Column_name | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment | Visible | Expression |
++----------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+------------+
+| jugyou64 |          1 | i64      |            1 | id          | A         |           3 |     NULL |   NULL | YES  | BTREE      |         |               | YES     | NULL       |
++----------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+------------+
+1 row in set (0.06 sec)
+
+mysql> EXPLAIN SELECT * FROM jugyou64 WHERE id = 1;
++----+-------------+----------+------------+------+---------------+------+---------+-------+------+----------+-------+
+| id | select_type | table    | partitions | type | possible_keys | key  | key_len | ref   | rows | filtered | Extra |
++----+-------------+----------+------------+------+---------------+------+---------+-------+------+----------+-------+
+|  1 | SIMPLE      | jugyou64 | NULL       | ref  | i64           | i64  | 5       | const |    1 |   100.00 | NULL  |
++----+-------------+----------+------------+------+---------------+------+---------+-------+------+----------+-------+
+1 row in set, 1 warning (0.06 sec)
+
+mysql> EXPLAIN SELECT * FROM jugyou64 WHERE v = 'Apple';
++----+-------------+----------+------------+------+---------------+------+---------+------+------+----------+-------------+
+| id | select_type | table    | partitions | type | possible_keys | key  | key_len | ref  | rows | filtered | Extra       |
++----+-------------+----------+------------+------+---------------+------+---------+------+------+----------+-------------+
+|  1 | SIMPLE      | jugyou64 | NULL       | ALL  | NULL          | NULL | NULL    | NULL |    3 |    33.33 | Using where |
++----+-------------+----------+------------+------+---------------+------+---------+------+------+----------+-------------+
+1 row in set, 1 warning (0.02 sec)
+
+mysql> drop index i64 on jugyou64;
+Query OK, 0 rows affected (0.09 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> show index from jugyou64;
+Empty set (0.01 sec)
+
+mysql> select * from jugyou64;
++------+------------+
+| id   | v          |
++------+------------+
+|    1 | Apple      |
+|    2 | Orange     |
+|    3 | Strawberry |
++------+------------+
+3 rows in set (0.11 sec)
+
+mysql> CREATE VIEW ende AS SELECT * FROM jugyou64 WHERE v LIKE '%E';
+Query OK, 0 rows affected (0.36 sec)
+
+mysql> select * from ende;
++------+--------+
+| id   | v      |
++------+--------+
+|    1 | Apple  |
+|    2 | Orange |
++------+--------+
+2 rows in set (0.04 sec)
+
+mysql> 
